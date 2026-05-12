@@ -18,8 +18,6 @@ raw image
 -> optional Google Sheet append + email notification
 ```
 
-No OpenAI/API fallback is used at runtime.
-
 ## Sample
 
 Detection preview:
