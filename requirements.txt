@@ -1,31 +1,24 @@
-# Image processing
-torch>=2.0.0
-kornia>=0.7.0
-opencv-python>=4.8.0
-Pillow>=9.0.0
-pillow-heif>=0.13.0
+# Core image processing
 numpy>=1.24.0
+opencv-python>=4.8.0
+Pillow==10.2.0
+pillow-heif==0.18.0
 
-# YOLO region detection
+# Detection
 ultralytics>=8.0.0
 
-# Auto-labeling (Grounding DINO — Option B)
-transformers>=4.35.0
-
 # OCR
-paddlepaddle==2.6.2
-paddleocr>=2.7.0
+torch>=2.0.0
+easyocr>=1.7.0
+vietocr==0.3.13
 
-# LLM
-openai>=1.0.0
-
-# Export
+# Google Sheets + OAuth
 gspread>=5.10.0
 google-auth>=2.17.0
+google-auth-oauthlib>=1.2.0
 
 # Config
 python-dotenv>=1.0.0
 
 # Dev/test
 pytest>=7.0.0
-pytest-mock>=3.12.0

@@ -6,7 +6,7 @@ __pycache__/
 *.pyo
 .pytest_cache/
 
-# Secrets & credentials
+# Secrets and credentials
 .env
 .env.*
 credentials.json
@@ -15,27 +15,21 @@ client_secret*.json
 *.json.key
 gcp_*.json
 
-# Model weights (large files)
+# Model weights
 *.pt
 *.pth
 *.onnx
 *.safetensors
 *.ckpt
 runs/
-# Ngoại lệ: model đã train
-!models/yolo_regions/**/weights/best.pt
+!models/yolo_regions/mail_3field/weights/best.pt
 
-# Data (images & labels — không commit raw data)
-data/raw_images/
-data/labels/
-data/yolo_dataset/images/
-data/yolo_dataset/labels/
-data/ocr_crops/
-data/ocr_labels/
-data/processed/
-data/ner_data/
+# Data and generated debug output
+data/**
+debug_*/
+!data/.gitkeep
 
-# EasyOCR & HuggingFace cache
+# External caches
 ~/.EasyOCR/
 ~/.cache/huggingface/
 

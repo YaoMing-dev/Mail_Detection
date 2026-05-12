@@ -1,9 +1,0 @@
-{
-  "0": "sender_block",
-  "1": "receiver_block",
-  "2": "tracking_number",
-  "3": "address_block",
-  "4": "content_block",
-  "5": "fee_block",
-  "6": "datetime_block"
-}

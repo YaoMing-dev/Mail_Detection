@@ -72,20 +72,20 @@ def test_detect_regions_empty_when_no_detection():
 
 def test_detect_regions_multiple_boxes_same_class():
     mock_box1 = MagicMock()
-    mock_box1.cls.item.return_value = 0
+    mock_box1.cls.item.return_value = 1
     mock_box1.conf.item.return_value = 0.9
     mock_box1.xyxy.__getitem__ = MagicMock(return_value=MagicMock())
     mock_box1.xyxy[0].tolist.return_value = [10, 10, 100, 50]
 
     mock_box2 = MagicMock()
-    mock_box2.cls.item.return_value = 0
+    mock_box2.cls.item.return_value = 1
     mock_box2.conf.item.return_value = 0.7
     mock_box2.xyxy.__getitem__ = MagicMock(return_value=MagicMock())
     mock_box2.xyxy[0].tolist.return_value = [10, 60, 100, 110]
 
     mock_result = MagicMock()
     mock_result.boxes = [mock_box1, mock_box2]
-    mock_result.names = {0: "sender_block"}
+    mock_result.names = {1: "receiver_block"}
 
     with patch("ultralytics.YOLO") as MockYOLO:
         MockYOLO.return_value.return_value = [mock_result]
@@ -93,4 +93,34 @@ def test_detect_regions_multiple_boxes_same_class():
         img = np.zeros((800, 600, 3), dtype=np.uint8)
         regions = detect_regions(img, model_path="fake_model.pt")
 
-    assert len(regions["sender_block"]) == 2
+    assert len(regions["receiver_block"]) == 2
+
+
+def test_detect_regions_sender_block_keeps_single_box():
+    # A tighter left box with slightly lower conf should beat an oversized right box.
+    mock_box_left = MagicMock()
+    mock_box_left.cls.item.return_value = 0
+    mock_box_left.conf.item.return_value = 0.59
+    mock_box_left.xyxy.__getitem__ = MagicMock(return_value=MagicMock())
+    mock_box_left.xyxy[0].tolist.return_value = [40, 60, 380, 620]
+
+    mock_box_big_right = MagicMock()
+    mock_box_big_right.cls.item.return_value = 0
+    mock_box_big_right.conf.item.return_value = 0.66
+    mock_box_big_right.xyxy.__getitem__ = MagicMock(return_value=MagicMock())
+    mock_box_big_right.xyxy[0].tolist.return_value = [300, 20, 1180, 760]
+
+    mock_result = MagicMock()
+    mock_result.boxes = [mock_box_left, mock_box_big_right]
+    mock_result.names = {0: "sender_block"}
+
+    with patch("ultralytics.YOLO") as MockYOLO:
+        MockYOLO.return_value.return_value = [mock_result]
+        from src.detect_regions import detect_regions
+        img = np.zeros((800, 1200, 3), dtype=np.uint8)
+        regions = detect_regions(img, model_path="fake_model.pt")
+
+    assert len(regions["sender_block"]) == 1
+    x1, y1, x2, y2, conf = regions["sender_block"][0]
+    assert (x1, y1, x2, y2) == (40, 60, 380, 620)
+    assert abs(conf - 0.59) < 0.01
