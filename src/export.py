@@ -1,28 +1,52 @@
 import smtplib
+from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from typing import Dict, List, Optional
 
 from src.auth_google import get_gspread_client
 
-SHEET_COLUMNS: List[str] = [
+# Existing Google Sheet layout, columns A -> K.
+SHEET_COLUMNS_A_TO_K: List[str] = [
     "ma_van_don",
     "don_vi_van_chuyen",
     "nguoi_gui",
     "sdt_gui",
-    "email_gui",
-    "dia_chi_gui",
     "nguoi_nhan",
     "sdt_nhan",
-    "email_nhan",
     "dia_chi_nhan",
     "noi_dung_hang_hoa",
     "tien_thu_ho",
     "ngay_gio_gui",
     "trang_thai",
-    "need_review",
-    "ngay_nhan",
 ]
+
+
+def _first_value(data: Dict[str, Optional[str]], *keys: str) -> str:
+    for key in keys:
+        value = data.get(key)
+        if value is not None and str(value).strip():
+            return str(value).strip()
+    return ""
+
+
+def _build_sheet_row(data: Dict[str, Optional[str]]) -> List[str]:
+    row = [
+        _first_value(data, "ma_van_don"),
+        _first_value(data, "don_vi_van_chuyen"),
+        _first_value(data, "nguoi_gui"),
+        _first_value(data, "sdt_gui"),
+        _first_value(data, "nguoi_nhan"),
+        _first_value(data, "sdt_nhan", "email_nhan"),
+        _first_value(data, "dia_chi_nhan"),
+        _first_value(data, "noi_dung_hang_hoa"),
+        _first_value(data, "tien_thu_ho"),
+        _first_value(data, "ngay_gio_gui"),
+        _first_value(data, "trang_thai") or "Pending",
+    ]
+    if not row[9]:
+        row[9] = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    return row
 
 
 def push_to_sheet(
@@ -33,9 +57,8 @@ def push_to_sheet(
 ) -> None:
     gc = get_gspread_client(credentials_file=credentials_file, token_file=token_file)
     ws = gc.open_by_key(sheet_id).sheet1
-    row = [data.get(col) or "" for col in SHEET_COLUMNS[:-1]]
-    row.append("")
-    ws.append_row(row)
+    row = _build_sheet_row(data)
+    ws.append_row(row, value_input_option="USER_ENTERED")
 
 
 def _build_html(data: Dict[str, Optional[str]], confirm_url: str) -> str:

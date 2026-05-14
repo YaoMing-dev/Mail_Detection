@@ -333,6 +333,22 @@ npm.cmd run dev
 
 The GG Sheet page calls the existing Python export code. Fill `.env` in the repo root with Google Sheet and SMTP settings before using `Sheet`, `Email`, or `Both`.
 
+Google Sheet export appends only columns A-K to match the current sheet format:
+
+```text
+A ma_van_don
+B don_vi_van_chuyen
+C nguoi_gui
+D sdt_gui
+E nguoi_nhan
+F sdt_nhan
+G dia_chi_nhan
+H noi_dung_hang_hoa
+I tien_thu_ho
+J ngay_gio_gui
+K trang_thai
+```
+
 Required for Google Sheet:
 
 ```env
