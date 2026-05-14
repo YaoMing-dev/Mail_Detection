@@ -2,9 +2,11 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   AlertCircle,
+  Archive,
   CheckCircle,
   ChevronRight,
   Database,
+  ExternalLink,
   FileText,
   History,
   Image as ImageIcon,
@@ -49,9 +51,11 @@ function App() {
   const [currentShipment, setCurrentShipment] = React.useState(null);
   const [reviewTasks, setReviewTasks] = React.useState([]);
   const [sheetRows, setSheetRows] = React.useState([]);
+  const [appConfig, setAppConfig] = React.useState(null);
   const [selectedTask, setSelectedTask] = React.useState(null);
   const [editBuffer, setEditBuffer] = React.useState(null);
   const [exportingId, setExportingId] = React.useState(null);
+  const [storingId, setStoringId] = React.useState(null);
   const logEndRef = React.useRef(null);
 
   React.useEffect(() => {
@@ -61,6 +65,7 @@ function App() {
   React.useEffect(() => {
     loadReviewQueue();
     loadSheetRows();
+    loadAppConfig();
   }, []);
 
   const theme = isDark ? 'app dark' : 'app light';
@@ -88,6 +93,16 @@ function App() {
       setSheetRows(await response.json());
     } catch {
       setSheetRows([]);
+    }
+  }
+
+  async function loadAppConfig() {
+    try {
+      const response = await fetch(`${API_BASE}/api/app/config`);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      setAppConfig(await response.json());
+    } catch {
+      setAppConfig(null);
     }
   }
 
@@ -174,6 +189,23 @@ function App() {
       addLog(`Export that bai: ${error.message}`, 'error');
     } finally {
       setExportingId(null);
+    }
+  }
+
+  async function storeShipment(shipment) {
+    setStoringId(shipment.id);
+    try {
+      const response = await fetch(`${API_BASE}/api/shipments/${shipment.id}/storage`, {
+        method: 'POST'
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.message || `HTTP ${response.status}`);
+      addLog(`Da luu ${payload.imageName} vao storage.json (${payload.savedVersions} ban).`, 'success');
+      await loadAppConfig();
+    } catch (error) {
+      addLog(`Luu storage.json that bai: ${error.message}`, 'error');
+    } finally {
+      setStoringId(null);
     }
   }
 
@@ -356,12 +388,24 @@ function App() {
               <div className="sheet-toolbar">
                 <div>
                   <h2>GG Sheet</h2>
-                  <p>{sheetRows.length} ban ghi trong MongoDB, co the day sang Google Sheet hoac gui email.</p>
+                  <p>{sheetRows.length} ban ghi trong MongoDB. Storage file: {appConfig?.storagePath || 'storage.json'}</p>
                 </div>
-                <button className="secondary" onClick={loadSheetRows}>
-                  <RefreshCw size={16} />
-                  Refresh
-                </button>
+                <div className="toolbar-actions">
+                  <a
+                    className={appConfig?.googleSheetUrl ? 'secondary link-button' : 'secondary link-button disabled'}
+                    href={appConfig?.googleSheetUrl || undefined}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-disabled={!appConfig?.googleSheetUrl}
+                  >
+                    <ExternalLink size={16} />
+                    Open Google Sheet
+                  </a>
+                  <button className="secondary" onClick={() => { loadSheetRows(); loadAppConfig(); }}>
+                    <RefreshCw size={16} />
+                    Refresh
+                  </button>
+                </div>
               </div>
 
               <div className="panel sheet-table">
@@ -385,6 +429,10 @@ function App() {
                       <button onClick={() => exportShipment(row, 'both')} disabled={!!exportingId}>
                         {exportingId === `${row.id}-both` ? <Loader2 className="spin" size={15} /> : <Send size={15} />}
                         Both
+                      </button>
+                      <button onClick={() => storeShipment(row)} disabled={!!storingId}>
+                        {storingId === row.id ? <Loader2 className="spin" size={15} /> : <Archive size={15} />}
+                        Storage
                       </button>
                     </div>
                   </div>

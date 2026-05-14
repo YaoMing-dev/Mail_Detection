@@ -38,6 +38,7 @@ backend/mail-ocr-backend
 backend/mail-ocr-backend.exe
 backend-spring/target/
 uploads/
+storage.json
 
 # Frontend
 frontend/node_modules/

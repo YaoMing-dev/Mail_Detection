@@ -762,6 +762,12 @@ button {
   gap: 18px;
 }
 
+.toolbar-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
 .sheet-toolbar h2 {
   margin: 0;
   font-size: 22px;
@@ -836,6 +842,15 @@ button {
   font-weight: 850;
 }
 
+.link-button {
+  text-decoration: none;
+}
+
+.link-button.disabled {
+  pointer-events: none;
+  opacity: 0.55;
+}
+
 .sheet-actions button:disabled {
   cursor: wait;
   opacity: 0.6;
@@ -894,7 +909,8 @@ button {
   }
 
   .sheet-actions,
-  .button-row {
+  .button-row,
+  .toolbar-actions {
     display: grid;
     grid-template-columns: 1fr;
   }

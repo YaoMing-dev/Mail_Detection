@@ -244,6 +244,8 @@ Features:
 - Show generated JPG detection previews, including HEIC uploads.
 - Review low-confidence records in Human Review.
 - Export saved records to Google Sheet and/or notification email from the GG Sheet page.
+- Open the configured Google Sheet directly from the GG Sheet page.
+- Save per-image JSON snapshots to `storage.json` in the repo root.
 
 ### Web Prerequisites
 
@@ -348,6 +350,8 @@ SMTP_USER=your@gmail.com
 SMTP_PASSWORD=your_gmail_app_password
 NOTIFY_EMAIL=recipient@gmail.com
 ```
+
+The `Storage` button on the GG Sheet page writes to `storage.json`. The file is intentionally ignored by git because it is local runtime data. Its top-level keys are image filenames, and each key stores a list of saved snapshots for that image.
 ## Current Limitation
 
 YOLO detection is strong enough for the current three-region task. The remaining quality bottleneck is OCR on handwritten Vietnamese fields. For production quality, collect reviewed line crops and fine-tune VietOCR or another local recognizer.
