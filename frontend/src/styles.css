@@ -856,6 +856,244 @@ button {
   opacity: 0.6;
 }
 
+.training-page {
+  display: grid;
+  gap: 18px;
+}
+
+.training-tabs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.training-tabs button {
+  height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--panel);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.training-tabs button.active {
+  color: #60a5fa;
+  background: rgba(37, 99, 235, 0.12);
+  border-color: rgba(96, 165, 250, 0.28);
+}
+
+.small-refresh {
+  margin-left: auto;
+}
+
+.training-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+  gap: 18px;
+}
+
+.training-card,
+.training-warning {
+  padding: 22px;
+}
+
+.training-metric {
+  display: grid;
+  gap: 8px;
+}
+
+.training-metric span,
+.training-metric small,
+.model-path span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.training-metric strong {
+  font-size: 54px;
+  line-height: 1;
+}
+
+.training-progress {
+  height: 10px;
+  margin: 22px 0;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--panel-2);
+}
+
+.training-progress i {
+  display: block;
+  height: 100%;
+  background: var(--emerald);
+}
+
+.training-state {
+  border-radius: 8px;
+  padding: 12px;
+  font-weight: 900;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.training-state.ready {
+  color: var(--emerald);
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.training-state.blocked {
+  color: var(--orange);
+  background: rgba(249, 115, 22, 0.12);
+}
+
+.training-warning h2 {
+  margin: 0 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+}
+
+.training-warning p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.warning-box {
+  margin: 18px 0;
+  border: 1px solid rgba(249, 115, 22, 0.25);
+  border-radius: 8px;
+  padding: 14px;
+  color: var(--orange);
+  background: rgba(249, 115, 22, 0.08);
+  font-weight: 750;
+}
+
+.model-path {
+  display: grid;
+  gap: 7px;
+  margin-bottom: 18px;
+}
+
+.model-path code {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--panel-2);
+  overflow: auto;
+}
+
+.danger-action {
+  height: 46px;
+  border: 0;
+  border-radius: 8px;
+  padding: 0 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  background: #dc2626;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.danger-action:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.storage-review {
+  display: grid;
+  gap: 18px;
+}
+
+.storage-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.storage-card {
+  overflow: hidden;
+}
+
+.storage-card > img,
+.storage-no-image {
+  width: 100%;
+  height: 230px;
+  display: grid;
+  place-items: center;
+  object-fit: contain;
+  background: #020617;
+  color: #64748b;
+}
+
+.storage-body {
+  padding: 16px;
+}
+
+.storage-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.storage-title strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.storage-title span {
+  flex-shrink: 0;
+  border-radius: 999px;
+  padding: 5px 9px;
+  color: var(--emerald);
+  background: rgba(16, 185, 129, 0.1);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.storage-fields {
+  display: grid;
+  gap: 10px;
+}
+
+.storage-fields div {
+  display: grid;
+  gap: 4px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.storage-fields span {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.storage-fields strong {
+  font-size: 13px;
+  font-weight: 650;
+}
+
 .spin {
   animation: spin 0.8s linear infinite;
 }
@@ -904,7 +1142,9 @@ button {
   .dashboard-grid,
   .review-grid,
   .edit-fields,
-  .sheet-row {
+  .sheet-row,
+  .training-grid,
+  .storage-grid {
     grid-template-columns: 1fr;
   }
 

@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import {
   AlertCircle,
   Archive,
+  BrainCircuit,
   CheckCircle,
   ChevronRight,
   Database,
@@ -20,6 +21,7 @@ import {
   Sun,
   Table2,
   Terminal,
+  Trash2,
   Upload,
   UserCheck
 } from 'lucide-react';
@@ -52,6 +54,10 @@ function App() {
   const [reviewTasks, setReviewTasks] = React.useState([]);
   const [sheetRows, setSheetRows] = React.useState([]);
   const [appConfig, setAppConfig] = React.useState(null);
+  const [trainingTab, setTrainingTab] = React.useState('confirm');
+  const [trainingStatus, setTrainingStatus] = React.useState(null);
+  const [storageCatalog, setStorageCatalog] = React.useState(null);
+  const [trainingBusy, setTrainingBusy] = React.useState(false);
   const [selectedTask, setSelectedTask] = React.useState(null);
   const [editBuffer, setEditBuffer] = React.useState(null);
   const [exportingId, setExportingId] = React.useState(null);
@@ -66,6 +72,7 @@ function App() {
     loadReviewQueue();
     loadSheetRows();
     loadAppConfig();
+    loadTrainingData();
   }, []);
 
   const theme = isDark ? 'app dark' : 'app light';
@@ -103,6 +110,22 @@ function App() {
       setAppConfig(await response.json());
     } catch {
       setAppConfig(null);
+    }
+  }
+
+  async function loadTrainingData() {
+    try {
+      const [statusResponse, storageResponse] = await Promise.all([
+        fetch(`${API_BASE}/api/app/training/status`),
+        fetch(`${API_BASE}/api/app/storage`)
+      ]);
+      if (!statusResponse.ok) throw new Error(`Training HTTP ${statusResponse.status}`);
+      if (!storageResponse.ok) throw new Error(`Storage HTTP ${storageResponse.status}`);
+      setTrainingStatus(await statusResponse.json());
+      setStorageCatalog(await storageResponse.json());
+    } catch {
+      setTrainingStatus(null);
+      setStorageCatalog(null);
     }
   }
 
@@ -201,11 +224,30 @@ function App() {
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.message || `HTTP ${response.status}`);
       addLog(`Da luu ${payload.imageName} vao storage.json (${payload.savedVersions} ban).`, 'success');
-      await loadAppConfig();
+      await Promise.all([loadAppConfig(), loadTrainingData()]);
     } catch (error) {
       addLog(`Luu storage.json that bai: ${error.message}`, 'error');
     } finally {
       setStoringId(null);
+    }
+  }
+
+  async function confirmTraining() {
+    setTrainingBusy(true);
+    try {
+      const response = await fetch(`${API_BASE}/api/app/training/start`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ confirmed: true })
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.message || `HTTP ${response.status}`);
+      addLog(`Training request ${payload.requestId} da duoc tao.`, 'success');
+      await loadTrainingData();
+    } catch (error) {
+      addLog(`Khong the bat dau training: ${error.message}`, 'error');
+    } finally {
+      setTrainingBusy(false);
     }
   }
 
@@ -231,6 +273,10 @@ function App() {
             <Table2 size={19} />
             <span>GG Sheet</span>
           </button>
+          <button className={activeTab === 'training' ? 'active' : ''} onClick={() => { setActiveTab('training'); loadTrainingData(); }}>
+            <BrainCircuit size={19} />
+            <span>Training</span>
+          </button>
         </nav>
 
         <div className="model-box">
@@ -249,7 +295,7 @@ function App() {
 
       <section className="workspace">
         <header className="topbar">
-          <h1>{activeTab === 'dashboard' ? 'AI Extraction Pipeline' : activeTab === 'review' ? 'Human-in-the-loop Review' : 'GG Sheet Export'}</h1>
+          <h1>{activeTab === 'dashboard' ? 'AI Extraction Pipeline' : activeTab === 'review' ? 'Human-in-the-loop Review' : activeTab === 'sheet' ? 'GG Sheet Export' : 'Training Control'}</h1>
           <div className="top-actions">
             <span className="engine-pill">{ENGINE_LABEL}</span>
             <button className="icon-btn" onClick={() => setIsDark(!isDark)} aria-label="Toggle theme">
@@ -439,6 +485,102 @@ function App() {
                 ))}
                 {sheetRows.length === 0 && <div className="empty">Chua co ban ghi.</div>}
               </div>
+            </div>
+          )}
+
+          {activeTab === 'training' && (
+            <div className="training-page">
+              <div className="training-tabs">
+                <button className={trainingTab === 'confirm' ? 'active' : ''} onClick={() => setTrainingTab('confirm')}>
+                  <BrainCircuit size={16} />
+                  Confirm Training
+                </button>
+                <button className={trainingTab === 'storage' ? 'active' : ''} onClick={() => setTrainingTab('storage')}>
+                  <Archive size={16} />
+                  Storage Review
+                </button>
+                <button className="secondary small-refresh" onClick={loadTrainingData}>
+                  <RefreshCw size={15} />
+                  Refresh
+                </button>
+              </div>
+
+              {trainingTab === 'confirm' && (
+                <div className="training-grid">
+                  <section className="panel training-card">
+                    <div className="training-metric">
+                      <span>Reviewed snapshots</span>
+                      <strong>{trainingStatus?.reviewCount ?? 0}</strong>
+                      <small>Minimum required: {trainingStatus?.minimumReviews ?? 20}</small>
+                    </div>
+                    <div className="training-progress">
+                      <i style={{ width: `${Math.min(100, ((trainingStatus?.reviewCount || 0) / (trainingStatus?.minimumReviews || 20)) * 100)}%` }} />
+                    </div>
+                    <div className={trainingStatus?.canTrain ? 'training-state ready' : 'training-state blocked'}>
+                      {trainingStatus?.canTrain ? 'Ready for training' : `Need ${trainingStatus?.missingReviews ?? 20} more reviewed snapshots`}
+                    </div>
+                  </section>
+
+                  <section className="panel training-warning">
+                    <h2><Trash2 size={18} />Training confirmation</h2>
+                    <p>{trainingStatus?.reason || 'Training requires at least 20 reviewed storage snapshots.'}</p>
+                    <div className="warning-box">
+                      Sau khi xac nhan training, flow training se dung data review moi. Khi train xong, model cu se bi thay the va app se ap dung model moi ngay.
+                    </div>
+                    <div className="model-path">
+                      <span>Active model</span>
+                      <code>{trainingStatus?.activeModelPath || 'models/yolo_regions/mail_3field/weights/best.pt'}</code>
+                    </div>
+                    <button
+                      className="danger-action"
+                      onClick={confirmTraining}
+                      disabled={!trainingStatus?.canTrain || trainingBusy}
+                    >
+                      {trainingBusy ? <Loader2 className="spin" size={16} /> : <BrainCircuit size={16} />}
+                      Confirm & Start Training
+                    </button>
+                  </section>
+                </div>
+              )}
+
+              {trainingTab === 'storage' && (
+                <div className="storage-review">
+                  <div className="sheet-toolbar">
+                    <div>
+                      <h2>Storage Review</h2>
+                      <p>{storageCatalog?.imageCount || 0} anh, {storageCatalog?.totalReviews || 0} review snapshots trong storage.json.</p>
+                    </div>
+                    <span className="engine-pill">{storageCatalog?.storagePath || 'storage.json'}</span>
+                  </div>
+
+                  <div className="storage-grid">
+                    {(storageCatalog?.images || []).map(item => (
+                      <article className="storage-card panel" key={item.imageName}>
+                        {item.shipmentId ? (
+                          <img src={`${API_BASE}/api/shipments/${item.shipmentId}/image`} alt={item.imageName} />
+                        ) : (
+                          <div className="storage-no-image"><FileText size={36} /></div>
+                        )}
+                        <div className="storage-body">
+                          <div className="storage-title">
+                            <strong>{item.imageName}</strong>
+                            <span>{item.versions} saved</span>
+                          </div>
+                          <div className="storage-fields">
+                            {Object.entries(item.fields || {}).slice(0, 8).map(([key, value]) => (
+                              <div key={key}>
+                                <span>{fieldLabel(key)}</span>
+                                <strong>{String(value || '---')}</strong>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </article>
+                    ))}
+                    {(storageCatalog?.images || []).length === 0 && <div className="empty panel">storage.json chua co du lieu review.</div>}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </main>

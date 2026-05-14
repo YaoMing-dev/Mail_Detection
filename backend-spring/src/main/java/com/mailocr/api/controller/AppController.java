@@ -2,6 +2,8 @@ package com.mailocr.api.controller;
 
 import com.mailocr.api.service.ShipmentService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,5 +19,23 @@ public class AppController {
   @GetMapping("/config")
   public ShipmentService.AppConfigResponse config() {
     return shipmentService.appConfig();
+  }
+
+  @GetMapping("/storage")
+  public ShipmentService.StorageCatalogResponse storage() {
+    return shipmentService.storageCatalog();
+  }
+
+  @GetMapping("/training/status")
+  public ShipmentService.TrainingStatusResponse trainingStatus() {
+    return shipmentService.trainingStatus();
+  }
+
+  @PostMapping("/training/start")
+  public ShipmentService.TrainingStartResponse startTraining(@RequestBody TrainingRequest request) {
+    return shipmentService.startTraining(request.confirmed());
+  }
+
+  public record TrainingRequest(boolean confirmed) {
   }
 }

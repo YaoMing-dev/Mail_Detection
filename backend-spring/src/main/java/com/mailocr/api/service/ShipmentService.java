@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.dao.DataAccessException;
 import org.springframework.core.io.FileSystemResource;
@@ -23,6 +24,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ShipmentService {
+  private static final int MIN_TRAINING_REVIEWS = 20;
+
   private final MailOcrProperties properties;
   private final PipelineService pipelineService;
   private final ShipmentRepository shipmentRepository;
@@ -147,6 +150,81 @@ public class ShipmentService {
     return new StorageResponse(true, imageName, storagePath.toString(), storage.get(imageName).size());
   }
 
+  public StorageCatalogResponse storageCatalog() {
+    Map<String, List<Map<String, Object>>> storage = readStorage();
+    List<StorageImageResponse> images = new ArrayList<>();
+    int totalReviews = 0;
+
+    for (Map.Entry<String, List<Map<String, Object>>> entry : storage.entrySet()) {
+      List<Map<String, Object>> snapshots = entry.getValue() == null ? List.of() : entry.getValue();
+      totalReviews += snapshots.size();
+      Map<String, Object> latest = snapshots.isEmpty() ? new LinkedHashMap<>() : snapshots.get(snapshots.size() - 1);
+      images.add(new StorageImageResponse(
+          entry.getKey(),
+          snapshots.size(),
+          stringValue(latest.get("shipmentId")),
+          stringValue(latest.get("previewImagePath")),
+          stringValue(latest.get("savedAt")),
+          mapValue(latest.get("fields"))
+      ));
+    }
+
+    return new StorageCatalogResponse(
+        projectRoot().resolve("storage.json").normalize().toString(),
+        images.size(),
+        totalReviews,
+        images
+    );
+  }
+
+  public TrainingStatusResponse trainingStatus() {
+    StorageCatalogResponse catalog = storageCatalog();
+    int missing = Math.max(0, MIN_TRAINING_REVIEWS - catalog.totalReviews());
+    return new TrainingStatusResponse(
+        catalog.totalReviews(),
+        MIN_TRAINING_REVIEWS,
+        missing,
+        missing == 0,
+        "Training requires at least 20 reviewed storage snapshots. After training is approved, the old model will be replaced by the new model and the app will use the new model immediately.",
+        properties.getModelPath()
+    );
+  }
+
+  public synchronized TrainingStartResponse startTraining(boolean confirmed) {
+    TrainingStatusResponse status = trainingStatus();
+    if (!confirmed) {
+      throw new IllegalArgumentException("Training confirmation is required.");
+    }
+    if (!status.canTrain()) {
+      throw new IllegalArgumentException("Not enough reviewed data. Need " + status.missingReviews() + " more review snapshots before training.");
+    }
+
+    Path projectRoot = projectRoot();
+    Path trainingDir = projectRoot.resolve("training_runs").normalize();
+    try {
+      Files.createDirectories(trainingDir);
+      String requestId = "training-" + Instant.now().toString().replace(":", "").replace(".", "");
+      Path manifest = trainingDir.resolve(requestId + ".json");
+      Map<String, Object> payload = new LinkedHashMap<>();
+      payload.put("requestId", requestId);
+      payload.put("requestedAt", Instant.now());
+      payload.put("reviewCount", status.reviewCount());
+      payload.put("storagePath", projectRoot.resolve("storage.json").normalize().toString());
+      payload.put("currentModelPath", properties.getModelPath());
+      payload.put("replacementPolicy", "Replace old model with newly trained model after training completes.");
+      payload.put("status", "REQUESTED");
+      objectMapper.writerWithDefaultPrettyPrinter().writeValue(manifest.toFile(), payload);
+      return new TrainingStartResponse(
+          true,
+          requestId,
+          manifest.toString(),
+          "Training request created. The next training runner should consume this manifest, train from reviewed data, replace the old model, and apply the new model."
+      );
+    } catch (IOException e) {
+      throw new PipelineException("Cannot write training request manifest.", e);
+    }
+  }
+
   private Path storeUpload(MultipartFile file) {
     if (file.isEmpty()) {
       throw new IllegalArgumentException("Upload file is empty.");
@@ -202,6 +280,18 @@ public class ShipmentService {
     return Path.of(properties.getProjectRoot()).toAbsolutePath().normalize();
   }
 
+  private Map<String, List<Map<String, Object>>> readStorage() {
+    Path storagePath = projectRoot().resolve("storage.json").normalize();
+    if (!Files.exists(storagePath)) {
+      return new LinkedHashMap<>();
+    }
+    try {
+      return objectMapper.readValue(storagePath.toFile(), new TypeReference<Map<String, List<Map<String, Object>>>>() {});
+    } catch (IOException e) {
+      throw new PipelineException("Cannot read storage.json.", e);
+    }
+  }
+
   private String readConfigValue(String key) {
     String value = System.getenv(key);
     if (value != null && !value.isBlank()) {
@@ -236,6 +326,15 @@ public class ShipmentService {
     return value;
   }
 
+  @SuppressWarnings("unchecked")
+  private static Map<String, Object> mapValue(Object value) {
+    return value instanceof Map<?, ?> map ? (Map<String, Object>) map : new LinkedHashMap<>();
+  }
+
+  private static String stringValue(Object value) {
+    return Optional.ofNullable(value).map(String::valueOf).orElse(null);
+  }
+
   public record ExtractionResponse(Shipment shipment, boolean persisted, String pipelineOutput) {
   }
 
@@ -246,5 +345,31 @@ public class ShipmentService {
   }
 
   public record StorageResponse(boolean ok, String imageName, String storagePath, int savedVersions) {
+  }
+
+  public record StorageCatalogResponse(String storagePath, int imageCount, int totalReviews, List<StorageImageResponse> images) {
+  }
+
+  public record StorageImageResponse(
+      String imageName,
+      int versions,
+      String shipmentId,
+      String previewImagePath,
+      String savedAt,
+      Map<String, Object> fields
+  ) {
+  }
+
+  public record TrainingStatusResponse(
+      int reviewCount,
+      int minimumReviews,
+      int missingReviews,
+      boolean canTrain,
+      String reason,
+      String activeModelPath
+  ) {
+  }
+
+  public record TrainingStartResponse(boolean ok, String requestId, String manifestPath, String message) {
   }
 }

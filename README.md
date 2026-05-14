@@ -246,6 +246,7 @@ Features:
 - Export saved records to Google Sheet and/or notification email from the GG Sheet page.
 - Open the configured Google Sheet directly from the GG Sheet page.
 - Save per-image JSON snapshots to `storage.json` in the repo root.
+- Use the Training page to review stored snapshots and gate model retraining.
 
 ### Web Prerequisites
 
@@ -352,6 +353,27 @@ NOTIFY_EMAIL=recipient@gmail.com
 ```
 
 The `Storage` button on the GG Sheet page writes to `storage.json`. The file is intentionally ignored by git because it is local runtime data. Its top-level keys are image filenames, and each key stores a list of saved snapshots for that image.
+
+### Training Page
+
+The Training page has two views:
+
+- `Confirm Training`: shows the reviewed snapshot count, requires at least 20 snapshots, and blocks training confirmation until enough reviewed data exists.
+- `Storage Review`: displays all images saved in `storage.json`, including preview images and reviewed fields.
+
+Training confirmation is intentionally explicit because the intended production flow is:
+
+```text
+review data reaches >= 20 snapshots
+-> operator confirms training
+-> training runner consumes storage.json
+-> new model is trained
+-> old model is replaced
+-> app immediately uses the new model
+```
+
+The current API writes a training request manifest under `training_runs/`. A separate training runner should consume that manifest and perform the actual model training/replacement step.
+
 ## Current Limitation
 
 YOLO detection is strong enough for the current three-region task. The remaining quality bottleneck is OCR on handwritten Vietnamese fields. For production quality, collect reviewed line crops and fine-tune VietOCR or another local recognizer.
