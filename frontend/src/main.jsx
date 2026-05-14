@@ -60,6 +60,7 @@ function App() {
   const [trainingBusy, setTrainingBusy] = React.useState(false);
   const [selectedTask, setSelectedTask] = React.useState(null);
   const [editBuffer, setEditBuffer] = React.useState(null);
+  const [reviewSubmitting, setReviewSubmitting] = React.useState(false);
   const [exportingId, setExportingId] = React.useState(null);
   const [storingId, setStoringId] = React.useState(null);
   const logEndRef = React.useRef(null);
@@ -174,7 +175,8 @@ function App() {
   }
 
   async function submitReview() {
-    if (!selectedTask || !editBuffer) return;
+    if (!selectedTask || !editBuffer || reviewSubmitting) return;
+    setReviewSubmitting(true);
     addLog(`Dang luu chinh sua cho task ${selectedTask.id}...`, 'info');
     try {
       const response = await fetch(`${API_BASE}/api/shipments/${selectedTask.id}/review`, {
@@ -184,12 +186,14 @@ function App() {
       });
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.message || `HTTP ${response.status}`);
-      addLog(`Task ${selectedTask.id} da xac nhan va luu vao MongoDB.`, 'success');
+      addLog(`Task ${selectedTask.id} da xac nhan, luu MongoDB va them vao storage.json.`, 'success');
       setSelectedTask(null);
       setEditBuffer(null);
-      await Promise.all([loadReviewQueue(), loadSheetRows()]);
+      await Promise.all([loadReviewQueue(), loadSheetRows(), loadTrainingData()]);
     } catch (error) {
       addLog(`Khong luu duoc review: ${error.message}`, 'error');
+    } finally {
+      setReviewSubmitting(false);
     }
   }
 
@@ -416,9 +420,9 @@ function App() {
                         ))}
                       </div>
                       <div className="editor-actions">
-                        <button className="save" onClick={submitReview}>
-                          <Save size={18} />
-                          Submit & Save
+                        <button className="save" onClick={submitReview} disabled={reviewSubmitting}>
+                          {reviewSubmitting ? <Loader2 className="spin" size={18} /> : <Save size={18} />}
+                          {reviewSubmitting ? 'Saving...' : 'Submit & Save'}
                         </button>
                         <button className="secondary" onClick={() => setSelectedTask(null)}>Discard</button>
                       </div>

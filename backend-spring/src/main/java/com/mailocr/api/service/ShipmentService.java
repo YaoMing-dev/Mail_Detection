@@ -82,7 +82,9 @@ public class ShipmentService {
     shipment.setStatus(ShipmentStatus.VERIFIED);
     shipment.setReviewedBy(reviewedBy);
     shipment.setUpdatedAt(Instant.now());
-    return shipmentRepository.save(shipment);
+    Shipment saved = shipmentRepository.save(shipment);
+    storeSnapshot(saved);
+    return saved;
   }
 
   public Resource image(String id) {
@@ -114,6 +116,10 @@ public class ShipmentService {
   public synchronized StorageResponse storeJson(String id) {
     Shipment shipment = shipmentRepository.findById(id)
         .orElseThrow(() -> new IllegalArgumentException("Shipment not found: " + id));
+    return storeSnapshot(shipment);
+  }
+
+  private synchronized StorageResponse storeSnapshot(Shipment shipment) {
     Path storagePath = projectRoot().resolve("storage.json").normalize();
 
     Map<String, List<Map<String, Object>>> storage = new LinkedHashMap<>();
