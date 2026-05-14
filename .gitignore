@@ -36,6 +36,12 @@ debug_*/
 # Backend binary
 backend/mail-ocr-backend
 backend/mail-ocr-backend.exe
+backend-spring/target/
+uploads/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
 
 # Misc
 train.log

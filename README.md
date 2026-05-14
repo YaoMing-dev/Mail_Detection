@@ -1,4 +1,4 @@
-# Mail Detection
+﻿# Mail Detection
 
 Local-only mail form extraction for three regions:
 
@@ -226,6 +226,129 @@ models/yolo_regions/mail_3field/weights/best.pt
 .\.venv312\Scripts\python.exe -m pytest tests -q
 ```
 
+## Web App (React + Spring Boot + MongoDB)
+
+The web layer wraps the existing local AI pipeline:
+
+```text
+frontend/         React dashboard, Human Review UI, GG Sheet page
+backend-spring/   Spring Boot API, MongoDB persistence, Python pipeline/export wrapper
+```
+
+Features:
+
+- Upload JPG/PNG/HEIC mail form images from the browser.
+- Run the bundled YOLO model at `models/yolo_regions/mail_3field/weights/best.pt`.
+- Use VietOCR by default for local OCR.
+- Store extraction results in MongoDB.
+- Show generated JPG detection previews, including HEIC uploads.
+- Review low-confidence records in Human Review.
+- Export saved records to Google Sheet and/or notification email from the GG Sheet page.
+
+### Web Prerequisites
+
+Windows install commands:
+
+```powershell
+winget install --id EclipseAdoptium.Temurin.17.JDK -e
+winget install --id MongoDB.Server -e
+winget install --id MongoDB.Shell -e
+```
+
+Install Maven 3.9+ from Apache Maven if `winget` does not provide it:
+
+```text
+https://maven.apache.org/download.cgi
+```
+
+This local setup used:
+
+```text
+JDK 17:  C:\Program Files\Eclipse Adoptium\jdk-17.0.19.10-hotspot
+Maven:   D:\tools\apache-maven-3.9.15
+MongoDB: mongodb://localhost:27017/mail_ocr
+```
+
+Node.js 20+ is recommended for the React frontend.
+
+### Start MongoDB
+
+MongoDB is installed as a Windows service by the official installer:
+
+```powershell
+Get-Service MongoDB
+Start-Service MongoDB
+```
+
+Optional connection test:
+
+```powershell
+mongosh mongodb://localhost:27017/mail_ocr --eval "db.runCommand({ ping: 1 })"
+```
+
+### Start Backend
+
+Run MongoDB first, then start the API. If your repository path contains only ASCII characters:
+
+```powershell
+cd backend-spring
+$env:MONGODB_URI="mongodb://localhost:27017/mail_ocr"
+$env:MAIL_OCR_PROJECT_ROOT="D:\Dev\mail-ocr-ner"
+$env:MAIL_OCR_PYTHON="D:\Dev\mail-ocr-ner\.venv312\Scripts\python.exe"
+$env:MAIL_OCR_BACKEND="vietocr"
+mvn spring-boot:run
+```
+
+If the path contains Vietnamese characters, Java/Maven may fail to resolve classpaths. Use the included launcher, which maps the repo to a temporary `M:` drive:
+
+```powershell
+.\backend-spring\run-backend.cmd
+```
+
+The backend runs at:
+
+```text
+http://localhost:8080
+```
+
+### Start Frontend
+
+```powershell
+cd frontend
+npm.cmd install
+npm.cmd run dev
+```
+
+Open `http://localhost:5173`. The UI calls `http://localhost:8080` by default and uses the bundled `best.pt` model with VietOCR. Uploaded HEIC files are shown through a generated JPG detection preview from the Python pipeline. To change the API URL:
+
+```powershell
+$env:VITE_API_BASE_URL="http://localhost:8080"
+npm.cmd run dev
+```
+
+### Export Setup
+
+The GG Sheet page calls the existing Python export code. Fill `.env` in the repo root with Google Sheet and SMTP settings before using `Sheet`, `Email`, or `Both`.
+
+Required for Google Sheet:
+
+```env
+GOOGLE_SHEET_ID=your_google_sheet_id_here
+GOOGLE_CREDENTIALS_FILE=credentials.json
+GOOGLE_TOKEN_FILE=token.json
+```
+
+Required for email:
+
+```env
+CONFIRM_BASE_URL=http://localhost:8080
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your@gmail.com
+SMTP_PASSWORD=your_gmail_app_password
+NOTIFY_EMAIL=recipient@gmail.com
+```
 ## Current Limitation
 
 YOLO detection is strong enough for the current three-region task. The remaining quality bottleneck is OCR on handwritten Vietnamese fields. For production quality, collect reviewed line crops and fine-tune VietOCR or another local recognizer.
+

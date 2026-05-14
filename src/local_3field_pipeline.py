@@ -69,7 +69,7 @@ def _expand_tracking_box(box: Box, image_w: int, image_h: int) -> tuple[int, int
         max(0, int(x1 - bw * 0.35)),
         max(0, int(y1 - bh * 0.35)),
         min(image_w, int(x2 + bw * 0.35)),
-        min(image_h, int(y2 + bh * 2.3)),
+        min(image_h, int(y2 + bh * 0.45)),
     )
 
 
@@ -207,6 +207,9 @@ def _extract_phone(text: str) -> Optional[str]:
 def _looks_like_label(line: str) -> bool:
     low = line.lower()
     folded = _fold_text(line)
+    compact = re.sub(r"[^a-z0-9]+", "", folded)
+    if line.strip().endswith(":") and len(line.strip()) <= 24:
+        return True
     return any(
         token in low or token in folded
         for token in (
@@ -228,15 +231,52 @@ def _looks_like_label(line: str) -> bool:
             "điện thoại",
             "dien thoai",
             "tel",
+            "ten",
+            "dia chi",
+            "sender",
+            "receiver",
+            "recipient",
+            "tracking",
+            "phone number",
+            "postal code",
+            "weight",
+            "sender s name",
+            "sender s address",
+            "recipient s name",
+            "recipient s address",
+            "ems",
+            "chuyen phat",
+            "hotline",
+            "website",
         )
-    ) or ("dung" in folded and len(line) < 20)
+    ) or compact in {
+        "ten",
+        "diachi",
+        "nguoigui",
+        "nguoinhan",
+        "mabuuchinh",
+        "dienthoai",
+        "phonenumber",
+        "sendersname",
+        "sendersaddress",
+        "recipientsname",
+        "recipientsaddress",
+        "postalcode",
+        "trackingnumber",
+    } or ("dung" in folded and len(line) < 20)
 
 
 def _extract_tracking(text: str) -> Optional[str]:
-    compact = re.sub(r"[^A-Za-z0-9]", "", text).upper()
     candidates = []
-    candidates.extend(re.findall(r"\d{8,15}", compact))
-    candidates.extend(re.findall(r"[A-Z]{1,5}\d{6,15}[A-Z0-9]{0,5}", compact))
+    for line in text.splitlines():
+        folded = _fold_text(line)
+        if any(token in folded for token in ("sender", "recipient", "address", "phone", "weight", "postal", "nguoi", "dia chi", "dien thoai")):
+            continue
+        compact = re.sub(r"[^A-Za-z0-9]", "", line).upper()
+        if not compact:
+            continue
+        candidates.extend(re.findall(r"\d{8,15}", compact))
+        candidates.extend(re.findall(r"[A-Z]{2}\d{8,13}[A-Z]{0,3}", compact))
     candidates = [c for c in candidates if not c.startswith(("1800", "1900"))]
     if not candidates:
         return None
@@ -248,6 +288,9 @@ def _clean_lines(lines: List[str]) -> List[str]:
     for line in lines:
         line = _normalize_text(line)
         if not line:
+            continue
+        folded = _fold_text(line)
+        if folded in {"vicinam", "sinon"}:
             continue
         if _looks_like_label(line):
             right = line.split(":", 1)[-1].strip() if ":" in line else ""
@@ -321,9 +364,20 @@ def _parse_party(lines: List[str], role: str) -> tuple[Optional[str], Optional[s
     lines = _clean_lines(lines)
     blob = "\n".join(lines)
     phone = _extract_phone(blob)
+    if phone is None:
+        loose_digits = [
+            re.sub(r"[^\d]", "", line)
+            for line in lines
+            if 8 <= len(re.sub(r"[^\d]", "", line)) <= 11
+        ]
+        for value in loose_digits:
+            if value.startswith("0") and not value.startswith(("1800", "1900")):
+                phone = value
+                break
     non_phone_lines = []
     for line in lines:
-        if _extract_phone(line):
+        digits = re.sub(r"[^\d]", "", line)
+        if _extract_phone(line) or (phone and digits == phone):
             continue
         non_phone_lines.append(line)
 
@@ -351,9 +405,6 @@ def parse_fields(ocr: Dict[str, Dict[str, object]]) -> Dict[str, Optional[str]]:
     receiver_name, receiver_phone, receiver_addr = _parse_party(list(ocr.get("receiver_block", {}).get("lines", [])), "receiver")
     tracking_text = str(ocr.get("tracking_number", {}).get("text", ""))
     tracking = ocr.get("tracking_number", {}).get("barcode") or _extract_tracking(tracking_text)
-    if not tracking:
-        tracking = _extract_tracking("\n".join(str(v.get("text", "")) for v in ocr.values()))
-
     return {
         "ma_van_don": tracking,
         "don_vi_van_chuyen": None,
@@ -409,6 +460,36 @@ def process_image(
     h, w = img_bgr.shape[:2]
 
     regions = detect_regions(img_bgr, model_path=model_path)
+    if save_debug:
+        preview = img_bgr.copy()
+        colors = {
+            "sender_block": (255, 120, 40),
+            "receiver_block": (40, 220, 120),
+            "tracking_number": (40, 160, 255),
+        }
+        labels = {
+            "sender_block": "SENDER",
+            "receiver_block": "RECEIVER",
+            "tracking_number": "TRACKING",
+        }
+        for cls_name, boxes in regions.items():
+            box = _best_box(boxes)
+            if not box:
+                continue
+            x1, y1, x2, y2, conf = box
+            color = colors.get(cls_name, (255, 255, 255))
+            cv2.rectangle(preview, (x1, y1), (x2, y2), color, 3)
+            cv2.putText(
+                preview,
+                f"{labels.get(cls_name, cls_name)} {conf:.2f}",
+                (x1, max(24, y1 - 8)),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.8,
+                color,
+                2,
+                cv2.LINE_AA,
+            )
+        cv2.imwrite(str(out / f"{src.stem}_preview.jpg"), preview)
     detector = _get_easyocr_reader()
     recognizer = _get_vietocr_predictor() if ocr_backend == "vietocr" else None
     ocr: Dict[str, Dict[str, object]] = {}
@@ -442,7 +523,13 @@ def process_image(
                     ocr[cls_name]["lines"] = [barcode_value]
 
     fields = parse_fields(ocr)
-    need_review = any(not fields.get(field) for field in ("ma_van_don", "nguoi_gui", "nguoi_nhan", "sdt_nhan"))
+    valid_sender_phone = bool(re.fullmatch(r"0\d{9,10}", str(fields.get("sdt_gui") or "")))
+    valid_receiver_phone = bool(re.fullmatch(r"0\d{9,10}", str(fields.get("sdt_nhan") or "")))
+    need_review = (
+        any(not fields.get(field) for field in ("ma_van_don", "nguoi_gui", "nguoi_nhan"))
+        or not valid_sender_phone
+        or not valid_receiver_phone
+    )
     fields["need_review"] = "YES" if need_review else "NO"
     result = {
         "source_image": str(src),
