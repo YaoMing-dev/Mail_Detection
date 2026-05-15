@@ -146,8 +146,9 @@ def test_parse_fields_rejects_ocr_garbage_as_name():
 
     result = parse_fields(ocr)
     nguoi_nhan = result.get("nguoi_nhan") or ""
-    assert "Nam)" not in nguoi_nhan
-    assert "Klw" not in nguoi_nhan
+    assert "Nam)" not in nguoi_nhan, f"Unbalanced bracket garbage in nguoi_nhan: {nguoi_nhan!r}"
+    assert "Klw" not in nguoi_nhan, f"Short-word garbage 'Klw' in nguoi_nhan: {nguoi_nhan!r}"
+    assert "Curf" not in nguoi_nhan, f"Short-word garbage 'Curf' in nguoi_nhan: {nguoi_nhan!r}"
     assert result["sdt_gui"] == "0937580738"
     assert result["sdt_nhan"] == "0331769433"
 

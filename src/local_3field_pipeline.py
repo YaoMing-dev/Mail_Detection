@@ -31,6 +31,7 @@ _EASYOCR_READER = None
 _VIETOCR_PREDICTOR = None
 _PADDLEOCR_READER = None
 
+_VIETOCR_FINETUNED = ROOT / "models" / "vietocr" / "transformerocr.pth"
 
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -109,6 +110,11 @@ def _get_vietocr_predictor():
     from vietocr.tool.predictor import Predictor
 
     cfg = Cfg.load_config_from_name("vgg_transformer")
+    if _VIETOCR_FINETUNED.exists():
+        cfg["weights"] = str(_VIETOCR_FINETUNED)
+        print(f"[VietOCR] fine-tuned model: {_VIETOCR_FINETUNED}")
+    else:
+        print("[VietOCR] pretrained model (chưa có fine-tuned weights)")
     cfg["device"] = "cuda" if torch.cuda.is_available() else "cpu"
     cfg["predictor"]["beamsearch"] = False
     _VIETOCR_PREDICTOR = Predictor(cfg)
@@ -119,7 +125,12 @@ def _get_paddleocr_reader():
     global _PADDLEOCR_READER
     if _PADDLEOCR_READER is not None:
         return _PADDLEOCR_READER
-    from paddleocr import PaddleOCR
+    try:
+        from paddleocr import PaddleOCR
+    except ImportError:
+        print("[PaddleOCR] paddleocr not installed (requires Python ≤ 3.12). "
+              "Falling back to vietocr backend.")
+        return None
     import torch
 
     use_gpu = torch.cuda.is_available()
@@ -356,7 +367,14 @@ def _looks_like_name_line(line: str) -> bool:
     if len(s) > 0 and digits / len(s) > 0.30:
         return False
     letters = sum(1 for c in s if c.isalpha())
-    return len(s) > 0 and letters / len(s) >= 0.50
+    if len(s) == 0 or letters / len(s) < 0.50:
+        return False
+    # Single short words are likely OCR noise ("Curf", "Jinge") — real names have
+    # multiple words or a single word long enough to be meaningful (≥ 6 chars).
+    words = s.split()
+    if len(words) == 1 and len(s) < 6:
+        return False
+    return True
 
 
 def _extract_tracking(text: str) -> Optional[str]:
@@ -526,7 +544,7 @@ def process_image(
     model_path: str,
     out_dir: str = "debug_3field",
     save_debug: bool = True,
-    ocr_backend: str = "paddleocr",
+    ocr_backend: str = "vietocr",
 ) -> Dict[str, object]:
     src = Path(image_path)
     out = Path(out_dir)
@@ -569,7 +587,13 @@ def process_image(
             )
         cv2.imwrite(str(out / f"{src.stem}_preview.jpg"), preview)
     easyocr_reader = _get_easyocr_reader()
-    paddle_reader = _get_paddleocr_reader() if ocr_backend == "paddleocr" else None
+    if ocr_backend == "paddleocr":
+        paddle_reader = _get_paddleocr_reader()
+        if paddle_reader is None:
+            print("[WARN] PaddleOCR unavailable, falling back to vietocr backend")
+            ocr_backend = "vietocr"
+    else:
+        paddle_reader = None
     recognizer = _get_vietocr_predictor() if ocr_backend in ("vietocr", "paddleocr") else None
     ocr: Dict[str, Dict[str, object]] = {}
     crops_meta = {}
@@ -636,7 +660,7 @@ def main() -> None:
     )
     parser.add_argument("--out_dir", default="debug_3field")
     parser.add_argument("--no_debug", action="store_true")
-    parser.add_argument("--ocr_backend", choices=["paddleocr", "vietocr", "easyocr"], default="paddleocr")
+    parser.add_argument("--ocr_backend", choices=["paddleocr", "vietocr", "easyocr"], default="vietocr")
     parser.add_argument("--export", action="store_true", help="Append result to Google Sheet and send email.")
     parser.add_argument("--no_sheet", action="store_true", help="When --export is set, skip Google Sheet append.")
     parser.add_argument("--no_email", action="store_true", help="When --export is set, skip notification email.")
