@@ -1,0 +1,310 @@
+data\ocr_crops\train\IMG_4700_line000.png	CHUYỂN PHÁT NHÁNH TRONG NƯỚC
+data\ocr_crops\train\IMG_4700_line007.png	EMS Vietnam
+data\ocr_crops\train\IMG_4700_line009.png	03800000035
+data\ocr_crops\train\IMG_4700_line015.png	036000000099
+data\ocr_crops\train\IMG_4700_line017.png	D 1900 54 54 33 0 webstrems.com.vn
+data\ocr_crops\train\IMG_4701_line004.png	THÔNG TRAN NGƯỜI
+data\ocr_crops\train\IMG_4701_line005.png	Viettel Post
+data\ocr_crops\train\IMG_4701_line006.png	QUÂN/HUYỀN: THUẬN
+data\ocr_crops\train\IMG_4701_line007.png	Tuy Hệ Thị Viên
+data\ocr_crops\train\IMG_4701_line008.png	03600000039
+data\ocr_crops\train\IMG_4701_line009.png	076.1022 Amminan
+data\ocr_crops\train\IMG_4701_line011.png	VTPT209527655999
+data\ocr_crops\train\IMG_4701_line012.png	THÔNG TIN NGƯỜI NHẬN
+data\ocr_crops\train\IMG_4701_line013.png	0762508583/0769ne9583
+data\ocr_crops\train\IMG_4701_line014.png	167 Nguyễn Tất Thành
+data\ocr_crops\train\IMG_4701_line015.png	Tên người nhận: Đad
+data\ocr_crops\train\IMG_4701_line016.png	038001001990003
+data\ocr_crops\train\IMG_4701_line017.png	nguyễn đạt/0930000535
+data\ocr_crops\train\IMG_4701_line018.png	CÂY THÀNH 705.... . ĐS 3, PHƯỜNG BÌNH HOA, THÀNH PHỐ
+data\ocr_crops\train\IMG_4701_line019.png	No.Street
+data\ocr_crops\train\IMG_4702_line000.png	STRANKING
+data\ocr_crops\train\IMG_4702_line003.png	Nwkl
+data\ocr_crops\train\IMG_4702_line004.png	Vuttel
+data\ocr_crops\train\IMG_4702_line005.png	CÔNG TY TNHH CÀ PHÊ NGON
+data\ocr_crops\train\IMG_4702_line006.png	Minh thị thị thuận thuận minh
+data\ocr_crops\train\IMG_4702_line007.png	NGON COFFEE COMPANY LIMITED
+data\ocr_crops\train\IMG_4702_line008.png	32 3642 199 - Fax: (484) 262 3642 198
+data\ocr_crops\train\IMG_4702_line009.png	0300100000199
+data\ocr_crops\train\IMG_4702_line011.png	0360000000095
+data\ocr_crops\train\IMG_4702_line012.png	4SD
+data\ocr_crops\train\IMG_4702_line013.png	277
+data\ocr_crops\train\IMG_4702_line014.png	WINN
+data\ocr_crops\train\IMG_4702_line016.png	03010000000098
+data\ocr_crops\train\IMG_4702_line017.png	Expersional
+data\ocr_crops\train\IMG_4702_line018.png	Kinh gửil To. FB. Nam
+data\ocr_crops\train\IMG_4702_line019.png	Tinkering
+data\ocr_crops\train\IMG_4702_line020.png	Số 14, đường sốn hạ. K Với Nằm... Dung appia... P. Kính, Hoàn, TT Thước. Ba. Tính. Bình, Ladâng
+data\ocr_crops\train\IMG_4702_line021.png	Mà Thự 0245.215.19 - Mi Lam 08663746.206
+data\ocr_crops\train\IMG_4702_line022.png	(Phio 00 4)
+data\ocr_crops\train\IMG_4704_line002.png	EMS tievnani chuyển phát nhanh trong nước và quốc te
+data\ocr_crops\train\IMG_4704_line005.png	EXPECTIONALIST
+data\ocr_crops\train\IMG_4704_line010.png	Contraction
+data\ocr_crops\train\IMG_4704_line013.png	03100000001
+data\ocr_crops\train\IMG_4704_line014.png	? à
+data\ocr_crops\train\IMG_4704_line015.png	D ??10'54 54 33 O websit ems.com.vn
+data\ocr_crops\train\IMG_4705_line000.png	Viettel Post
+data\ocr_crops\train\IMG_4705_line001.png	(Quý khách vui lòng sử dụng bút bi)
+data\ocr_crops\train\IMG_4705_line002.png	MÃ VẬN ĐƠN
+data\ocr_crops\train\IMG_4705_line003.png	1000.000.000.000
+data\ocr_crops\train\IMG_4705_line004.png	Tên người gửi:
+data\ocr_crops\train\IMG_4705_line005.png	Sender's name
+data\ocr_crops\train\IMG_4705_line006.png	Địa chỉ gửi:
+data\ocr_crops\train\IMG_4705_line007.png	Sender's address
+data\ocr_crops\train\IMG_4705_line008.png	Hỏa tốc
+data\ocr_crops\train\IMG_4705_line009.png	Phone number
+data\ocr_crops\train\IMG_4705_line010.png	Mã Khá.
+data\ocr_crops\train\IMG_4705_line011.png	Sender
+data\ocr_crops\train\IMG_4705_line012.png	0300000000199
+data\ocr_crops\train\IMG_4705_line013.png	[Nhân viên giao hàng cập nhật hình ảnh sau khi khách hàng kí nhận lên hệ thống]
+data\ocr_crops\train\IMG_4706_line002.png	Viettel post | Giao Trọn Trái Tim
+data\ocr_crops\train\IMG_4706_line006.png	(Quý khách vui lòng sử dụng bút bi)
+data\ocr_crops\train\IMG_4706_line007.png	19900000099
+data\ocr_crops\train\IMG_4706_line008.png	MÃ VẬN ĐƠN
+data\ocr_crops\train\IMG_4706_line009.png	Tên người gửi:
+data\ocr_crops\train\IMG_4706_line010.png	1.1/70
+data\ocr_crops\train\IMG_4706_line011.png	Sender's name
+data\ocr_crops\train\IMG_4706_line012.png	Địa chỉ gửi:
+data\ocr_crops\train\IMG_4706_line013.png	Sender's address
+data\ocr_crops\train\IMG_4706_line014.png	Hóa tốc
+data\ocr_crops\train\IMG_4706_line015.png	Phone number
+data\ocr_crops\train\IMG_4706_line016.png	038000000099
+data\ocr_crops\train\IMG_4706_line017.png	(Nhân viên giao hàng cập nhật hình ảnh sau khi khách hàng kí nhận lên hệ thống)
+data\ocr_crops\train\IMG_4707_line003.png	031010001933
+data\ocr_crops\train\IMG_4707_line004.png	1010
+data\ocr_crops\train\IMG_4707_line005.png	03610000000201
+data\ocr_crops\train\IMG_4707_line006.png	(press.vn
+data\ocr_crops\train\IMG_4708_line006.png	BALL
+data\ocr_crops\train\IMG_4708_line007.png	FS (VIETNAM) CO., LTD
+data\ocr_crops\train\IMG_4708_line008.png	SO 11 DUONG SO 8 KCN VIET NAM-
+data\ocr_crops\train\IMG_4708_line009.png	SINGAPORE P. BINH HOA, TP. HO CHI
+data\ocr_crops\train\IMG_4708_line010.png	MINH. VIET NAM ATTN: P KE TOAN
+data\ocr_crops\train\IMG_4708_line011.png	E24762.5.00.
+data\ocr_crops\train\IMG_4708_line013.png	IN 1990 IN HORNISTRATION PROMATIVE
+data\ocr_crops\train\IMG_4708_line015.png	NNU2601063
+data\ocr_crops\train\IMG_4708_line018.png	1063
+data\ocr_crops\train\IMG_4708_line019.png	Bài Thị Tuyết Nhưng
+data\ocr_crops\train\IMG_4708_line021.png	Đầu Thái Văn Chuyên Và Cá: Nguyên Các Lê 3... Việt 24?
+data\ocr_crops\train\IMG_4708_line022.png	Hơn đồng và trên website http./247express vn
+data\ocr_crops\train\IMG_4708_line023.png	có đảm các trên thị trị việt tranh viện thực người minh trong thị triển có có thể có có thể có thể chính thời thời thời choàn thư
+data\ocr_crops\train\IMG_4708_line024.png	Trên Thị Trên Thị Trong
+data\ocr_crops\train\IMG_4708_line025.png	Hotline: 1900 6980
+data\ocr_crops\train\IMG_4708_line026.png	03100000199
+data\ocr_crops\train\IMG_4712_line005.png	EF375912646VN
+data\ocr_crops\train\IMG_4712_line006.png	824510 - BCP KCN Vsip
+data\ocr_crops\train\IMG_4712_line007.png	Từ: Công Ty Tnhh Nihon
+data\ocr_crops\train\IMG_4712_line008.png	Canpack Việt Nam - SĐT:
+data\ocr_crops\train\IMG_4712_line009.png	Bến Cát, TP. Hồ Chí Minh
+data\ocr_crops\train\IMG_4712_line010.png	Chỉ dẫn giao hàng
+data\ocr_crops\train\IMG_4712_line011.png	CHIẾU CƯỚC GỌI NGƯỜI
+data\ocr_crops\train\IMG_4712_line013.png	Nội dung: HD 235 PO-009590-1
+data\ocr_crops\train\IMG_4712_line014.png	Phi quản lý thực hiện thu mua
+data\ocr_crops\train\IMG_4712_line015.png	CafePhố Sữa Latte 180ml
+data\ocr_crops\train\IMG_4712_line016.png	Hàng hoá: HD 235 P0-009590-1
+data\ocr_crops\train\IMG_4712_line017.png	Phí quản lý thực hiện thu mua
+data\ocr_crops\train\IMG_4712_line018.png	Cafe Phố Sữa Latte 180ml ? 1;
+data\ocr_crops\train\IMG_4712_line019.png	STTin: 1/1
+data\ocr_crops\train\IMG_4712_line020.png	16:41 ngày 13/04/2026
+data\ocr_crops\train\IMG_4712_line021.png	CONTRACTIONS
+data\ocr_crops\train\IMG_4712_line022.png	33333
+data\ocr_crops\train\IMG_4712_line023.png	Tils
+data\ocr_crops\train\IMG_4712_line024.png	billie
+data\ocr_crops\train\IMG_4712_line025.png	Tut
+data\ocr_crops\train\IMG_4712_line026.png	Việt
+data\ocr_crops\train\IMG_4713_line000.png	CHUYỂN PHÁT NHANH TRONG NƯỚC VÀ QUỐC TẾ
+data\ocr_crops\train\IMG_4713_line002.png	EMS Vietnam
+data\ocr_crops\train\IMG_4714_line000.png	Contramplementalized
+data\ocr_crops\train\IMG_4714_line001.png	MICRIZEDCO-AUL SWI (OLTO) (MVNLEIA) XOMANY) HOHN
+data\ocr_crops\train\IMG_4714_line003.png	amman
+data\ocr_crops\train\IMG_4714_line004.png	0301000000039
+data\ocr_crops\train\IMG_4714_line005.png	138000000099
+data\ocr_crops\train\IMG_4714_line006.png	CONTRACTIONAL
+data\ocr_crops\train\IMG_4714_line007.png	americal
+data\ocr_crops\train\IMG_4714_line008.png	STANDERS
+data\ocr_crops\train\IMG_4714_line009.png	Commons
+data\ocr_crops\train\IMG_4714_line010.png	0301000000002
+data\ocr_crops\train\IMG_4714_line011.png	ambracking
+data\ocr_crops\train\IMG_4716_line004.png	PHIẾU GŨI
+data\ocr_crops\train\IMG_4716_line005.png	PHIẾU GÚT CÓ TINH VÀ NHHÂN
+data\ocr_crops\train\IMG_4716_line006.png	NEUPOST
+data\ocr_crops\train\IMG_4716_line007.png	NEUPOST
+data\ocr_crops\train\IMG_4716_line008.png	604576883
+data\ocr_crops\train\IMG_4716_line009.png	001 troi Giao an
+data\ocr_crops\train\IMG_4716_line012.png	VƯỢN THỔ ỨC LAN
+data\ocr_crops\train\IMG_4716_line014.png	Manh Cu
+data\ocr_crops\train\IMG_4716_line015.png	Người gửi (From): Nguyên
+data\ocr_crops\train\IMG_4716_line016.png	Tầng 4, Maplestree B1
+data\ocr_crops\train\IMG_4716_line018.png	0916800583
+data\ocr_crops\train\IMG_4716_line019.png	Điện thoại (Tel):
+data\ocr_crops\train\IMG_4716_line021.png	Người nhận (To): Mr. Võ Tấn Hoàng M.
+data\ocr_crops\train\IMG_4716_line022.png	Công ty. THH . Vũ Nam
+data\ocr_crops\train\IMG_4716_line023.png	Số 1, Đường số 6, Khu công nghiệp Việt Nam Singapore
+data\ocr_crops\train\IMG_4716_line024.png	Tỉnh thành phố (City): Linga P051... phường, bình Hòa, TT. Hồ Chí Minh
+data\ocr_crops\train\IMG_4716_line025.png	031000000000
+data\ocr_crops\train\IMG_4716_line026.png	035550000000
+data\ocr_crops\train\IMG_4716_line027.png	Điện thoại (Tel)
+data\ocr_crops\train\IMG_4717_line001.png	0010000001
+data\ocr_crops\train\IMG_4717_line004.png	Philitomisman
+data\ocr_crops\train\IMG_4717_line005.png	PHIẾU GỬI
+data\ocr_crops\train\IMG_4717_line006.png	036100000199
+data\ocr_crops\train\IMG_4717_line007.png	BILL OF CONSIGNMENT
+data\ocr_crops\train\IMG_4717_line009.png	140055048584
+data\ocr_crops\train\IMG_4717_line010.png	140055048584
+data\ocr_crops\train\IMG_4717_line011.png	Mã khách hàng gửi:
+data\ocr_crops\train\IMG_4717_line012.png	Bơi Cục Góc....
+data\ocr_crops\train\IMG_4717_line014.png	Phương/x.
+data\ocr_crops\train\IMG_4717_line015.png	BÌNH HÒA
+data\ocr_crops\train\IMG_4717_line017.png	1811 cua p/1.1
+data\ocr_crops\train\IMG_4717_line018.png	BC Bình Hoa - BDG
+data\ocr_crops\train\IMG_4717_line020.png	giải mà thoại minh trì mương thì mu công nghiên và tran
+data\ocr_crops\train\IMG_4717_line021.png	HUBTAN - 1-BDGBHA-I
+data\ocr_crops\train\IMG_4717_line022.png	PHƯỜNG BÌNH HOÀ THÀNH PHỐ
+data\ocr_crops\train\IMG_4717_line023.png	Ở GƯỚC PHI
+data\ocr_crops\train\IMG_4717_line024.png	0.1 kg
+data\ocr_crops\train\IMG_4717_line025.png	Trong lượng:
+data\ocr_crops\train\IMG_4717_line026.png	- (cm)
+data\ocr_crops\train\IMG_4717_line027.png	Kích thước
+data\ocr_crops\train\IMG_4717_line028.png	Tổng cước
+data\ocr_crops\train\IMG_4717_line029.png	Người gười
+data\ocr_crops\train\IMG_4717_line030.png	Thanh loan cươc
+data\ocr_crops\train\IMG_4717_line031.png	Tiền thu hộ:
+data\ocr_crops\train\IMG_4717_line032.png	- Ghi chú.
+data\ocr_crops\train\IMG_4717_line033.png	NGÀY GIƠ NHÂN
+data\ocr_crops\train\IMG_4717_line034.png	1.1.1.20
+data\ocr_crops\train\IMG_4717_line035.png	0001 8095.000.000.000,11.19.1000
+data\ocr_crops\train\IMG_4718_line002.png	PHIẾU GỬI
+data\ocr_crops\train\IMG_4718_line003.png	Viettel Post
+data\ocr_crops\train\IMG_4718_line004.png	BILL OF CONSIGNMENT
+data\ocr_crops\train\IMG_4718_line005.png	139933639823
+data\ocr_crops\train\IMG_4718_line007.png	139933639823
+data\ocr_crops\train\IMG_4718_line008.png	Mã khách hàng gửi:
+data\ocr_crops\train\IMG_4718_line009.png	Bưu cục gốc: v]
+data\ocr_crops\train\IMG_4718_line010.png	marks
+data\ocr_crops\train\IMG_4718_line012.png	03100000001
+data\ocr_crops\train\IMG_4721_line000.png	(abtest (24/412026)
+data\ocr_crops\train\IMG_4721_line001.png	Tây cóm
+data\ocr_crops\train\IMG_4721_line002.png	27tin
+data\ocr_crops\train\IMG_4721_line003.png	Viettalism
+data\ocr_crops\train\IMG_4721_line004.png	Tuần P.D
+data\ocr_crops\train\IMG_4721_line005.png	TINH TP. HỒ CHÍ MINH
+data\ocr_crops\train\IMG_4721_line006.png	BỆNH BÌNH THẠNH
+data\ocr_crops\train\IMG_4721_line007.png	PHƯƠNG XÃ PHƯỜNG 25
+data\ocr_crops\train\IMG_4721_line008.png	(Quý khách vui lòng sử dụng bút bi)
+data\ocr_crops\train\IMG_4721_line009.png	14035143737
+data\ocr_crops\train\IMG_4721_line010.png	036000000036
+data\ocr_crops\train\IMG_4721_line011.png	Tiết kiệm
+data\ocr_crops\train\IMG_4722_line000.png	03600000005
+data\ocr_crops\train\IMG_4722_line001.png	Contractions
+data\ocr_crops\train\IMG_4723_line002.png	Viettel post | Giao Trọn Trái Tim
+data\ocr_crops\train\IMG_4723_line003.png	(Quý khách vui lòng sử dụng bứt bi)
+data\ocr_crops\train\IMG_4724_line000.png	241
+data\ocr_crops\train\IMG_4724_line001.png	711
+data\ocr_crops\train\IMG_4724_line004.png	Exposes
+data\ocr_crops\train\IMG_4724_line005.png	0 100545433
+data\ocr_crops\train\IMG_4730_line000.png	0361000000099
+data\ocr_crops\train\IMG_4730_line001.png	0360000039
+data\ocr_crops\train\IMG_4730_line002.png	CATE
+data\ocr_crops\train\IMG_4730_line003.png	0361704.1927
+data\ocr_crops\train\IMG_4730_line004.png	824510 - BCP KCN Vsip
+data\ocr_crops\train\IMG_4730_line007.png	03100000099
+data\ocr_crops\train\IMG_4730_line008.png	MS TÀI LIỆU - TÀI LIỆU
+data\ocr_crops\train\IMG_4730_line009.png	X1.(gram): 50.0es
+data\ocr_crops\train\IMG_4730_line010.png	GLIVA BCG XLLY
+data\ocr_crops\train\IMG_4730_line011.png	COD:04
+data\ocr_crops\train\IMG_4730_line012.png	Thu khac.0
+data\ocr_crops\train\IMG_4730_line013.png	Tống thu: 00
+data\ocr_crops\train\IMG_4730_line014.png	0056000000000
+data\ocr_crops\train\IMG_4730_line015.png	- Phi huy: 0d
+data\ocr_crops\train\IMG_4730_line016.png	Hàng hoá: hd 204.P0
+data\ocr_crops\train\IMG_4730_line017.png	009-1
+data\ocr_crops\train\IMG_4730_line019.png	mà hồi
+data\ocr_crops\train\IMG_4730_line024.png	STATE
+data\ocr_crops\train\IMG_4731_line000.png	036000000099
+data\ocr_crops\train\IMG_4731_line001.png	03100000099
+data\ocr_crops\train\IMG_4733_line011.png	BỒ PHIẾM XÃ HỘI VIẾT NAM
+data\ocr_crops\train\IMG_4733_line012.png	01 Quốc Iộ 1D - Khu phố 8 - Phường Quy Nhơn Bắc - Tỉnh Gia Lai
+data\ocr_crops\train\IMG_4733_line013.png	10256/3825364.3816760/Ngoài giờ hành chính: (0256) 381.79s
+data\ocr_crops\train\IMG_4733_line015.png	Bộ phân Tiếp nhận và Trà kết quả TTHC: (0256) 3820969 - 3153/650S
+data\ocr_crops\train\IMG_4733_line016.png	6 I Hotline: (0256) 3829222
+data\ocr_crops\train\IMG_4733_line017.png	sc. đựo/bhxh
+data\ocr_crops\train\IMG_4733_line022.png	HYPERCONTROLLATIONALISM
+data\ocr_crops\train\IMG_4733_line024.png	ZWAZZ
+data\ocr_crops\train\IMG_4735_line000.png	036000000003900
+data\ocr_crops\train\IMG_4735_line004.png	01910545433
+data\ocr_crops\train\IMG_4735_line005.png	O wessitems.com.vn
+data\ocr_crops\train\IMG_4757_line000.png	03819252NS-F21
+data\ocr_crops\train\IMG_4757_line001.png	Dân mã tem tại đây
+data\ocr_crops\train\IMG_4757_line002.png	- Là man
+data\ocr_crops\train\IMG_4757_line003.png	000
+data\ocr_crops\train\IMG_4757_line004.png	Số 4, đường số 8, VSIP 1
+data\ocr_crops\train\IMG_4757_line005.png	27, Định Thị Thung
+data\ocr_crops\train\IMG_4757_line007.png	Bình Hoà
+data\ocr_crops\train\IMG_4757_line008.png	Phường/Xã (Ward)
+data\ocr_crops\train\IMG_4757_line009.png	0360000000099
+data\ocr_crops\train\IMG_4757_line010.png	Post Code
+data\ocr_crops\train\IMG_4757_line011.png	Tinh/thành phố (Province/city)
+data\ocr_crops\train\IMG_4757_line012.png	Số điện thoại (Tel) Mr. Al: - CJc5 6S8 956
+data\ocr_crops\train\IMG_4757_line013.png	01900 6980
+data\ocr_crops\train\IMG_4757_line014.png	03000000000099
+data\ocr_crops\train\IMG_4759_line000.png	0301000000099
+data\ocr_crops\train\IMG_4759_line003.png	03300000099
+data\ocr_crops\train\IMG_4759_line004.png	Contraction
+data\ocr_crops\train\IMG_4762_line003.png	PRIVATE & CONFIDENTIAL
+data\ocr_crops\train\IMG_4762_line004.png	036000000099
+data\ocr_crops\train\IMG_4762_line005.png	CTY TNHH FES (VIET NAM) SO 11 DUONG SO 8
+data\ocr_crops\train\IMG_4762_line006.png	KHU CN VIETNAM-SINGAPORE
+data\ocr_crops\train\IMG_4762_line007.png	036100019910
+data\ocr_crops\train\IMG_4762_line012.png	Uncontractive
+data\ocr_crops\train\IMG_4767_line006.png	030000000017
+data\ocr_crops\train\IMG_4767_line008.png	03100000009
+data\ocr_crops\train\IMG_4802_line000.png	03800000039
+data\ocr_crops\train\IMG_4802_line001.png	03100000099
+data\ocr_crops\train\IMG_4802_line002.png	DRE7Ngly
+data\ocr_crops\train\IMG_4802_line003.png	Tw/Kinh cát
+data\ocr_crops\train\IMG_4802_line004.png	ExCorfrmahai Sp 04 EL6
+data\ocr_crops\train\IMG_4802_line005.png	ATTIN 5Mc Loon
+data\ocr_crops\train\IMG_4802_line006.png	044 46390
+data\ocr_crops\train\IMG_4802_line007.png	184
+data\ocr_crops\train\IMG_4802_line008.png	09E5683
+data\ocr_crops\train\IMG_4802_line010.png	247 Express
+data\ocr_crops\train\IMG_4802_line011.png	NONARCHARTHMATICALLY
+data\ocr_crops\train\IMG_4802_line012.png	Người nhận
+data\ocr_crops\train\IMG_4802_line013.png	Trọng lượng tính cước
+data\ocr_crops\train\IMG_4802_line014.png	Họ tần, chữ ký người nhân
+data\ocr_crops\train\IMG_4803_line000.png	0361000000337
+data\ocr_crops\train\IMG_4803_line001.png	(Quý khách vui lòng sử dụng bút bò
+data\ocr_crops\train\IMG_4810_line001.png	STON
+data\ocr_crops\train\IMG_4810_line002.png	Trình Hòa
+data\ocr_crops\train\IMG_4810_line003.png	Phường Bình Hòa
+data\ocr_crops\train\IMG_4810_line004.png	Phưong
+data\ocr_crops\train\IMG_4810_line005.png	03800100199
+data\ocr_crops\train\IMG_4810_line006.png	2, Phười
+data\ocr_crops\train\IMG_4810_line007.png	Date 7 Ngày
+data\ocr_crops\train\IMG_4810_line008.png	28-Apr-2026
+data\ocr_crops\train\IMG_4810_line009.png	FES (METNAM) CO...LTD. (""the Company") ("Công Ty")
+data\ocr_crops\train\IMG_4810_line010.png	To/Kính Gửi
+data\ocr_crops\train\IMG_4810_line011.png	SO 11, DUONG SO 8
+data\ocr_crops\train\IMG_4810_line012.png	KCN VIET NAM - SINGAPORE, PHUONG BINH HOA
+data\ocr_crops\train\IMG_4810_line013.png	TP. HO CHI MINH
+data\ocr_crops\train\IMG_4810_line014.png	VIETNAM
+data\ocr_crops\train\IMG_4810_line015.png	P.KE TOAN - BO PHAN THANH TOAN
+data\ocr_crops\train\IMG_4810_line016.png	Re/ Về Việc
+data\ocr_crops\train\IMG_4810_line017.png	TRANSACTION CONFIRMATION/ADVICE ("CONFIRMATION
+data\ocr_crops\train\IMG_4810_line018.png	Exconfirmatal
+data\ocr_crops\train\IMG_4810_line019.png	18 04 VL6
+data\ocr_crops\train\IMG_4810_line020.png	ATTry 5Mc 1900
+data\ocr_crops\train\IMG_4810_line021.png	446390
+data\ocr_crops\train\IMG_4810_line022.png	OFC 4
+data\ocr_crops\train\IMG_4810_line023.png	09E5683
+data\ocr_crops\train\IMG_4810_line024.png	184
+data\ocr_crops\train\IMG_4810_line026.png	247 Express
+data\ocr_crops\train\IMG_4810_line027.png	ANTICHERINATIONAL
+data\ocr_crops\train\IMG_4810_line028.png	NNU2601268
+data\ocr_crops\train\IMG_4810_line029.png	Người nhận
+data\ocr_crops\train\IMG_4810_line030.png	HỒ CHÍ MINH
+data\ocr_crops\train\IMG_4810_line031.png	PHƯỜNG BÌNH HÒA
+data\ocr_crops\train\IMG_4810_line032.png	Trong ương tính cước
+data\ocr_crops\train\IMG_4810_line033.png	Họ tên, chữ ký người nhân
+data\ocr_crops\train\IMG_4810_line034.png	Hợp đồng và trên webuite http://247express.v cu
+data\ocr_crops\train\IMG_4810_line035.png	Nhiều trên chính trường có và và cong cao có phịch hàng ru bằng đốc lý và đến đầu đủ nữ cang
+data\ocr_crops\train\IMG_4810_line036.png	Hotline: 1900 s9e0

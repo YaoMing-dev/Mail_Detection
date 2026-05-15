@@ -1,0 +1,87 @@
+data\ocr_crops\val\IMG_4703_line000.png	030100000000990
+data\ocr_crops\val\IMG_4703_line003.png	viettel post | Giao Trọn Trái Tim
+data\ocr_crops\val\IMG_4703_line004.png	(Quy khách vui lòng sử dụng bút bi)
+data\ocr_crops\val\IMG_4703_line007.png	036000000099
+data\ocr_crops\val\IMG_4703_line008.png	[Nhân viên giao hàng cập nhật hình ảnh sau khi khách hàng kí nhận lên hệ thống]
+data\ocr_crops\val\IMG_4709_line000.png	0301000199
+data\ocr_crops\val\IMG_4709_line002.png	DELIVERYORDER
+data\ocr_crops\val\IMG_4709_line003.png	Hóa tốc
+data\ocr_crops\val\IMG_4709_line004.png	Người gửi: 157135 - Đỗ Phạm Minh Tứ
+data\ocr_crops\val\IMG_4709_line005.png	WHINY VERTING HA TRANH VIÊN MANH THU MANH HAN MAN
+data\ocr_crops\val\IMG_4709_line006.png	Đường bộ
+data\ocr_crops\val\IMG_4709_line007.png	Địa chỉ: 3755 - Trụ Sở MWG
+data\ocr_crops\val\IMG_4709_line008.png	Lô T2-1.2, Đường D1, Khu Công nghệ cao, Phường
+data\ocr_crops\val\IMG_4709_line009.png	03755NT2604966227
+data\ocr_crops\val\IMG_4709_line010.png	Ngày giờ gửi
+data\ocr_crops\val\IMG_4709_line011.png	TGDD - NHẤT TÍN
+data\ocr_crops\val\IMG_4709_line013.png	Số điện thoại: 0971048393
+data\ocr_crops\val\IMG_4709_line014.png	Họ tên, chữ ký người gửi
+data\ocr_crops\val\IMG_4709_line015.png	Phạm Thị Thùy Loan
+data\ocr_crops\val\IMG_4709_line016.png	Địa chỉ: CÔNG TY TNHH FES (VIỆT NAM) - SỐ 11,
+data\ocr_crops\val\IMG_4709_line017.png	ĐƯỜNG SỐ 8, KCN VIỆT NAM - SINGAPORE,
+data\ocr_crops\val\IMG_4709_line018.png	Ngày giờ nhận
+data\ocr_crops\val\IMG_4709_line019.png	PPhường Bình Hòa, Thành phố Hồ Chí Minh
+data\ocr_crops\val\IMG_4709_line020.png	0360000000005
+data\ocr_crops\val\IMG_4709_line021.png	Họ tên, chữ ký người nhận:
+data\ocr_crops\val\IMG_4709_line022.png	Hồ Chí Minh
+data\ocr_crops\val\IMG_4709_line023.png	(Đã kiểm tra và không khiếu
+data\ocr_crops\val\IMG_4709_line024.png	Số điện thoại: 0764446390
+data\ocr_crops\val\IMG_4709_line025.png	Thư từ 2
+data\ocr_crops\val\IMG_4709_line026.png	Nội dung hàng hóa
+data\ocr_crops\val\IMG_4709_line027.png	Nhân viên trả hàng:
+data\ocr_crops\val\IMG_4709_line028.png	BB CẦN TRỪ ON
+data\ocr_crops\val\IMG_4709_line029.png	Nhân viên nhận hàng
+data\ocr_crops\val\IMG_4709_line030.png	Mã khách hàng:
+data\ocr_crops\val\IMG_4711_line001.png	Express Worldwide
+data\ocr_crops\val\IMG_4711_line002.png	EMPIRE MANUFACTURING SDN BHD
+data\ocr_crops\val\IMG_4711_line003.png	doran441m
+data\ocr_crops\val\IMG_4711_line004.png	SUZILIANA BINTI ADNAN
+data\ocr_crops\val\IMG_4711_line005.png	KUL
+data\ocr_crops\val\IMG_4711_line006.png	Jolan Kapar
+data\ocr_crops\val\IMG_4711_line007.png	TP. TES METNAM) CO.LTD. LTD. THỊ THỊ THỊ THỊ THỊ THỊ THỊ THỊ THỊ THỊ THỊ THỊ THUẬN
+data\ocr_crops\val\IMG_4711_line008.png	Team Le The Ngu
+data\ocr_crops\val\IMG_4711_line009.png	No 11. Street 8. Vietnam Singapore Industrial
+data\ocr_crops\val\IMG_4711_line010.png	Binh Hoa Ward, Thuan An District,
+data\ocr_crops\val\IMG_4711_line011.png	Binh Duong
+data\ocr_crops\val\IMG_4711_line012.png	Binh Hoa Ward
+data\ocr_crops\val\IMG_4711_line014.png	Vietnam
+data\ocr_crops\val\IMG_4711_line016.png	PHTVN-SGI
+data\ocr_crops\val\IMG_4711_line017.png	ADEGGPIE
+data\ocr_crops\val\IMG_4711_line018.png	Rof: FES VIE NAM
+data\ocr_crops\val\IMG_4711_line019.png	TRANSMONSTRIALISM
+data\ocr_crops\val\IMG_4711_line020.png	general business
+data\ocr_crops\val\IMG_4711_line021.png	WAYBILL 48 7468 1136
+data\ocr_crops\val\IMG_4711_line022.png	UNDERCOMMUNICATION
+data\ocr_crops\val\IMG_4711_line023.png	(2L)VN:SGNNSG%42000000
+data\ocr_crops\val\IMG_4711_line024.png	UNDERCOMMUNICATION
+data\ocr_crops\val\IMG_4711_line025.png	(J) JD01 4600 0125 8188 8571
+data\ocr_crops\val\IMG_4726_line000.png	247 Express
+data\ocr_crops\val\IMG_4734_line001.png	0310000000099
+data\ocr_crops\val\IMG_4734_line002.png	WAYBILL 69 1790 3764
+data\ocr_crops\val\IMG_4734_line003.png	EXPRESSWORLDWIDE DOX 2 HE
+data\ocr_crops\val\IMG_4734_line004.png	From: Givaudan Indonesia
+data\ocr_crops\val\IMG_4734_line005.png	1990.000.000.00000000099
+data\ocr_crops\val\IMG_4734_line006.png	PT GIVAUDAN INDONESIA
+data\ocr_crops\val\IMG_4734_line007.png	16415 SUKMAJAYA, MEKAR JAYA
+data\ocr_crops\val\IMG_4734_line008.png	FES (VIETNAM) CO., LTD.
+data\ocr_crops\val\IMG_4734_line009.png	INTERMINITATIONALISM
+data\ocr_crops\val\IMG_4734_line010.png	Nguyen Thi Thuy
+data\ocr_crops\val\IMG_4734_line011.png	No.11, Street 8, Vietnam Singapore
+data\ocr_crops\val\IMG_4734_line012.png	Industrial Park, Binh Hoa Ward,
+data\ocr_crops\val\IMG_4734_line013.png	Thuan An City, Binh Duong Province Vietnam
+data\ocr_crops\val\IMG_4734_line014.png	HO CHI MINH DISTRICT 1-BEN NGHE WARD
+data\ocr_crops\val\IMG_4734_line015.png	Vietnam
+data\ocr_crops\val\IMG_4734_line016.png	WLF1 VN-SGN-SSS
+data\ocr_crops\val\IMG_4734_line017.png	INTERMINATIONISM
+data\ocr_crops\val\IMG_4734_line018.png	ADIRECTIONALIZED
+data\ocr_crops\val\IMG_4734_line019.png	Pce/Shpt Weight
+data\ocr_crops\val\IMG_4734_line020.png	Ref: TR47647972
+data\ocr_crops\val\IMG_4734_line021.png	0.3 kg
+data\ocr_crops\val\IMG_4734_line022.png	WI JD01 4600 0125 7196 1569
+data\ocr_crops\val\IMG_4734_line023.png	The Trans Thanh Hoa Trang Nam The He Noister The Moter Anh Thanh Nam
+data\ocr_crops\val\IMG_4734_line025.png	general business
+data\ocr_crops\val\IMG_4734_line026.png	WAYBILL 69 1790 3764
+data\ocr_crops\val\IMG_4734_line027.png	INTERRECTIONALIZED
+data\ocr_crops\val\IMG_4734_line028.png	(2L)VN:SGNSSS%420000000
+data\ocr_crops\val\IMG_4734_line029.png	INTERMINATION
+data\ocr_crops\val\IMG_4734_line030.png	(J) JD01 4600 0125 7196 1569
