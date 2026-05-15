@@ -274,6 +274,12 @@ def _extract_phone(text: str) -> Optional[str]:
             value = match.group(0)
             if not value.startswith(("1800", "1900")):
                 return value
+    for pool in pools:
+        compact = re.sub(r"[^\d]", "", pool)
+        for match in re.finditer(r"0\d{8}", compact):
+            value = match.group(0)
+            if not value.startswith(("1800", "1900")):
+                return value
     return None
 
 

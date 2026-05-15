@@ -166,3 +166,11 @@ def test_ocr_crop_prefers_confidence_over_length():
     result = _ocr_crop(crop, reader_mock, min_conf=0.25)
     assert result["text"] == "Nguyen Van A"
     assert result["confidence"] == pytest.approx(0.95, rel=0.01)
+
+
+def test_extract_phone_9_digit_fallback():
+    from src.local_3field_pipeline import _extract_phone
+
+    assert _extract_phone("Dien thoai: 093758073") == "093758073"
+    assert _extract_phone("0937580738\n093758073") == "0937580738"
+    assert _extract_phone("12345678") is None
