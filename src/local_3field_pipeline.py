@@ -339,6 +339,20 @@ def _looks_like_label(line: str) -> bool:
     } or ("dung" in folded and len(line) < 20)
 
 
+def _looks_like_name_line(line: str) -> bool:
+    """Return True when a line is plausible as a person or company name."""
+    s = line.strip()
+    if not 3 <= len(s) <= 80:
+        return False
+    if s.count("(") != s.count(")"):
+        return False
+    digits = sum(1 for c in s if c.isdigit())
+    if len(s) > 0 and digits / len(s) > 0.30:
+        return False
+    letters = sum(1 for c in s if c.isalpha())
+    return len(s) > 0 and letters / len(s) >= 0.50
+
+
 def _extract_tracking(text: str) -> Optional[str]:
     candidates = []
     for line in text.splitlines():
@@ -447,7 +461,7 @@ def _parse_party(lines: List[str], role: str) -> tuple[Optional[str], Optional[s
             re.search(r"\d", line)
             or any(token in folded for token in ("duong", "phuong", "quan", "huyen", "tinh", "thanh pho", "ward", "province", "hcm", "vsip"))
         )
-        if not address_parts and not starts_address and len(line) >= 2 and not _looks_like_label(line):
+        if not address_parts and not starts_address and not _looks_like_label(line) and _looks_like_name_line(line):
             name_parts.append(line)
             continue
         if not _looks_like_label(line):

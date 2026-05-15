@@ -106,3 +106,45 @@ def test_ocr_crop_paddle_vietocr_with_boxes():
     result = _ocr_crop_paddle_vietocr(crop, paddle_mock, vietocr_mock)
     assert result["lines"] == ["0912345678", "Nguyen Van A"]
     assert "0912345678" in result["text"]
+
+
+def test_parse_fields_rejects_ocr_garbage_as_name():
+    from src.local_3field_pipeline import parse_fields
+
+    ocr = {
+        "sender_block": {
+            "lines": [
+                "NGUOI GUI",
+                "Ten:",
+                "Sender's name",
+                "Minh Gia",
+                "Dia chi:",
+                "Sender's address",
+                "0937580738",
+            ],
+            "text": "",
+        },
+        "receiver_block": {
+            "lines": [
+                "NGUOI NHAN",
+                "Ten:",
+                "Recipient's name",
+                "Curf",
+                "Nam)",
+                "Dia chi:",
+                "Recipient's address",
+                "Klw",
+                "Jinge",
+                "0331769433",
+            ],
+            "text": "",
+        },
+        "tracking_number": {"lines": ["30009684695"], "text": "30009684695"},
+    }
+
+    result = parse_fields(ocr)
+    nguoi_nhan = result.get("nguoi_nhan") or ""
+    assert "Nam)" not in nguoi_nhan
+    assert "Klw" not in nguoi_nhan
+    assert result["sdt_gui"] == "0937580738"
+    assert result["sdt_nhan"] == "0331769433"
