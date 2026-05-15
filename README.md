@@ -76,17 +76,20 @@ Stack:
 
 **Terminal 1 — Backend (Spring Boot):**
 ```powershell
+cd mail-ocr-ner
 .\backend-spring\run-backend.cmd
 ```
 
 **Terminal 2 — Frontend (React):**
 ```powershell
-cd frontend
+cd mail-ocr-ner\frontend
+npm install   # chỉ cần lần đầu
 npm run dev
 ```
 
 **Terminal 3 — Pipeline CLI (tuỳ chọn, test nhanh):**
 ```powershell
+cd mail-ocr-ner
 .\.venv312\Scripts\activate
 python -X utf8 src/local_3field_pipeline.py "path\to\image.heic" --ocr_backend vietocr
 ```
