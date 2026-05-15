@@ -61,3 +61,48 @@ def test_parse_fields_prefers_decoded_barcode():
     )
 
     assert result["ma_van_don"] == "90060964865"
+
+
+def test_ocr_crop_paddle_vietocr_empty_image():
+    import numpy as np
+    from unittest.mock import MagicMock
+    from src.local_3field_pipeline import _ocr_crop_paddle_vietocr
+
+    empty = np.zeros((0, 0, 3), dtype=np.uint8)
+    result = _ocr_crop_paddle_vietocr(empty, MagicMock(), MagicMock())
+    assert result == {"text": "", "lines": [], "confidence": 0.0}
+
+
+def test_ocr_crop_paddle_vietocr_no_detection():
+    import numpy as np
+    from unittest.mock import MagicMock
+    from src.local_3field_pipeline import _ocr_crop_paddle_vietocr
+
+    paddle_mock = MagicMock()
+    paddle_mock.ocr.return_value = [[]]
+    crop = np.zeros((100, 300, 3), dtype=np.uint8)
+    result = _ocr_crop_paddle_vietocr(crop, paddle_mock, MagicMock())
+    assert result["text"] == ""
+    assert result["lines"] == []
+
+
+def test_ocr_crop_paddle_vietocr_with_boxes():
+    import numpy as np
+    from unittest.mock import MagicMock
+    from src.local_3field_pipeline import _ocr_crop_paddle_vietocr
+
+    crop = np.ones((200, 400, 3), dtype=np.uint8) * 255
+    paddle_mock = MagicMock()
+    paddle_mock.ocr.return_value = [
+        [
+            [[10, 50], [200, 50], [200, 80], [10, 80]],
+            [[10, 10], [200, 10], [200, 40], [10, 40]],
+        ]
+    ]
+
+    vietocr_mock = MagicMock()
+    vietocr_mock.predict.side_effect = ["Nguyen Van A", "0912345678"]
+
+    result = _ocr_crop_paddle_vietocr(crop, paddle_mock, vietocr_mock)
+    assert result["lines"] == ["0912345678", "Nguyen Van A"]
+    assert "0912345678" in result["text"]

@@ -29,6 +29,8 @@ except ModuleNotFoundError:
 Box = Tuple[int, int, int, int, float]
 _EASYOCR_READER = None
 _VIETOCR_PREDICTOR = None
+_PADDLEOCR_READER = None
+
 
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -113,6 +115,24 @@ def _get_vietocr_predictor():
     return _VIETOCR_PREDICTOR
 
 
+def _get_paddleocr_reader():
+    global _PADDLEOCR_READER
+    if _PADDLEOCR_READER is not None:
+        return _PADDLEOCR_READER
+    from paddleocr import PaddleOCR
+    import torch
+
+    use_gpu = torch.cuda.is_available()
+    _PADDLEOCR_READER = PaddleOCR(
+        use_angle_cls=True,
+        lang="vi",
+        use_gpu=use_gpu,
+        show_log=False,
+    )
+    print(f"[PaddleOCR] PP-OCRv4 vi, gpu={use_gpu}")
+    return _PADDLEOCR_READER
+
+
 def _ocr_crop(crop_bgr: np.ndarray, reader, min_conf: float = 0.25) -> Dict[str, object]:
     if crop_bgr.size == 0:
         return {"text": "", "lines": [], "confidence": 0.0}
@@ -165,6 +185,59 @@ def _ocr_crop_vietocr(crop_bgr: np.ndarray, detector, recognizer, min_det_conf: 
     lines = [text for _, _, text, _ in items if text]
     confidence = sum(conf for *_, conf in items) / len(items) if items else 0.0
     return {"text": "\n".join(lines), "lines": lines, "confidence": confidence}
+
+
+def _ocr_crop_paddle_vietocr(
+    crop_bgr: np.ndarray,
+    paddle_reader,
+    vietocr_recognizer,
+) -> Dict[str, object]:
+    """Detect text boxes with PaddleOCR, then recognize each box with VietOCR."""
+    if crop_bgr.size == 0:
+        return {"text": "", "lines": [], "confidence": 0.0}
+    from PIL import Image
+
+    try:
+        det_result = paddle_reader.ocr(crop_bgr, rec=False, cls=False)
+    except Exception as exc:
+        print(f"[PaddleOCR] detection error: {exc}")
+        return {"text": "", "lines": [], "confidence": 0.0}
+
+    if not det_result or not det_result[0]:
+        return {"text": "", "lines": [], "confidence": 0.0}
+
+    h, w = crop_bgr.shape[:2]
+    items = []
+    for box_pts in det_result[0]:
+        try:
+            xs = [int(p[0]) for p in box_pts]
+            ys = [int(p[1]) for p in box_pts]
+        except (TypeError, IndexError):
+            continue
+        x1 = max(0, min(xs) - 4)
+        y1 = max(0, min(ys) - 4)
+        x2 = min(w, max(xs) + 4)
+        y2 = min(h, max(ys) + 4)
+        line_crop = crop_bgr[y1:y2, x1:x2]
+        if line_crop.size == 0:
+            continue
+        pil = Image.fromarray(cv2.cvtColor(line_crop, cv2.COLOR_BGR2RGB))
+        try:
+            text = _normalize_text(str(vietocr_recognizer.predict(pil)))
+        except Exception:
+            text = ""
+        if not text:
+            continue
+        items.append((y1, x1, text))
+
+    items.sort(key=lambda it: (it[0], it[1]))
+    lines = [text for _, _, text in items]
+    confidence = 0.85 if lines else 0.0
+    return {
+        "text": "\n".join(lines),
+        "lines": lines,
+        "confidence": confidence,
+    }
 
 
 def _decode_barcode(crop_bgr: np.ndarray) -> Optional[str]:
