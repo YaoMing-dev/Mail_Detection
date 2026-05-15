@@ -28,7 +28,12 @@ import {
 import './styles.css';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
-const ENGINE_LABEL = 'best.pt + VietOCR';
+
+const BACKEND_OPTIONS = [
+  { value: 'vietocr',   label: 'VietOCR (fine-tuned)' },
+  { value: 'easyocr',   label: 'EasyOCR' },
+  { value: 'paddleocr', label: 'PaddleOCR (PP-OCRv3)' },
+];
 
 const initialLogs = [
   { time: new Date().toLocaleTimeString(), msg: 'He thong da san sang. Cho tep dau vao...', type: 'info' }
@@ -45,6 +50,7 @@ function shipmentImageUrl(shipment) {
 function App() {
   const [isDark, setIsDark] = React.useState(false);
   const [activeTab, setActiveTab] = React.useState('dashboard');
+  const [selectedBackend, setSelectedBackend] = React.useState('vietocr');
   const [localPreview, setLocalPreview] = React.useState(null);
   const [serverPreview, setServerPreview] = React.useState(null);
   const [isProcessing, setIsProcessing] = React.useState(false);
@@ -79,6 +85,7 @@ function App() {
   const theme = isDark ? 'app dark' : 'app light';
   const visibleResults = results ? Object.entries(results).slice(0, 11) : [];
   const previewSrc = serverPreview || localPreview;
+  const engineLabel = `best.pt + ${BACKEND_OPTIONS.find(o => o.value === selectedBackend)?.label ?? selectedBackend}`;
 
   function addLog(msg, type = 'info') {
     setLogs(prev => [...prev, { time: new Date().toLocaleTimeString(), msg, type }]);
@@ -139,11 +146,11 @@ function App() {
     setIsProcessing(true);
     setResults(null);
     setCurrentShipment(null);
-    addLog(`Upload ${file.name}. Chay ${ENGINE_LABEL}...`, 'info');
+    addLog(`Upload ${file.name}. Chay ${engineLabel}...`, 'info');
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('ocrBackend', 'vietocr');
+    formData.append('ocrBackend', selectedBackend);
 
     try {
       const response = await fetch(`${API_BASE}/api/shipments/extract`, {
@@ -288,7 +295,7 @@ function App() {
             <History size={14} />
             <span>Active Engine</span>
           </div>
-          <strong className="engine-name">{ENGINE_LABEL}</strong>
+          <strong className="engine-name">{engineLabel}</strong>
           <div className="progress"><i /></div>
           <div className="model-meta">
             <span>Local runtime</span>
@@ -301,7 +308,7 @@ function App() {
         <header className="topbar">
           <h1>{activeTab === 'dashboard' ? 'AI Extraction Pipeline' : activeTab === 'review' ? 'Human-in-the-loop Review' : activeTab === 'sheet' ? 'GG Sheet Export' : 'Training Control'}</h1>
           <div className="top-actions">
-            <span className="engine-pill">{ENGINE_LABEL}</span>
+            <span className="engine-pill">{engineLabel}</span>
             <button className="icon-btn" onClick={() => setIsDark(!isDark)} aria-label="Toggle theme">
               {isDark ? <Sun size={18} /> : <Moon size={18} />}
             </button>
@@ -313,11 +320,25 @@ function App() {
           {activeTab === 'dashboard' && (
             <div className="dashboard-grid">
               <section className="left-stack">
+                <div className="model-select-row">
+                  <label htmlFor="ocr-backend-select">OCR Model</label>
+                  <select
+                    id="ocr-backend-select"
+                    value={selectedBackend}
+                    onChange={e => setSelectedBackend(e.target.value)}
+                    disabled={isProcessing}
+                  >
+                    {BACKEND_OPTIONS.map(o => (
+                      <option key={o.value} value={o.value}>{o.label}</option>
+                    ))}
+                  </select>
+                </div>
+
                 <label className="dropzone">
-                  <input type="file" onChange={handleFileUpload} accept="image/*,.heic,.heif" />
+                  <input type="file" onChange={handleFileUpload} accept="image/*,.heic,.heif" disabled={isProcessing} />
                   <span className="upload-icon"><Upload size={42} /></span>
                   <strong>Tai anh buu kien len he thong</strong>
-                  <small>YOLOv8 best.pt + VietOCR + MongoDB</small>
+                  <small>YOLOv8 best.pt + {BACKEND_OPTIONS.find(o => o.value === selectedBackend)?.label} + MongoDB</small>
                 </label>
 
                 <div className="panel preview-panel">

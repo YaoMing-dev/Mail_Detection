@@ -123,7 +123,7 @@ public class PipelineService {
   }
 
   private static boolean isSupportedBackend(String value) {
-    return "easyocr".equals(value) || "vietocr".equals(value);
+    return "easyocr".equals(value) || "vietocr".equals(value) || "paddleocr".equals(value);
   }
 
   private static Path resolve(Path projectRoot, String value) {

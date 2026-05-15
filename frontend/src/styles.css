@@ -274,6 +274,38 @@ button {
   align-content: start;
 }
 
+.model-select-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.model-select-row label {
+  font-size: 13px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.model-select-row select {
+  flex: 1;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.model-select-row select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .dropzone {
   position: relative;
   min-height: 220px;
