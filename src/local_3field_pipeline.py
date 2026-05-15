@@ -388,21 +388,6 @@ def _slice_sender_lines(lines: List[str]) -> List[str]:
 
 
 def _slice_receiver_lines(lines: List[str]) -> List[str]:
-    start = 0
-    for i, line in enumerate(lines):
-        folded = _fold_text(line)
-        if "nhan" in folded:
-            start = i + 1
-            break
-        low = line.lower()
-        ascii_line = low.encode("ascii", "ignore").decode("ascii")
-        if "nhận" in low or "nhan" in ascii_line:
-            start = i + 1
-            break
-    return lines[start:]
-
-
-def _slice_receiver_lines(lines: List[str]) -> List[str]:
     marker_idx = None
     for i, line in enumerate(lines):
         if "nhan" in _fold_text(line):
