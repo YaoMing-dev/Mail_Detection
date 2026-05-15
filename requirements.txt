@@ -11,6 +11,8 @@ ultralytics>=8.0.0
 torch>=2.0.0
 easyocr>=1.7.0
 vietocr==0.3.13
+paddlepaddle-gpu>=2.6.0
+paddleocr>=2.7.0
 
 # Google Sheets + OAuth
 gspread>=5.10.0
