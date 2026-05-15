@@ -1,6 +1,8 @@
 import sys
 from pathlib import Path
 
+import pytest
+
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 
@@ -148,3 +150,19 @@ def test_parse_fields_rejects_ocr_garbage_as_name():
     assert "Klw" not in nguoi_nhan
     assert result["sdt_gui"] == "0937580738"
     assert result["sdt_nhan"] == "0331769433"
+
+
+def test_ocr_crop_prefers_confidence_over_length():
+    from src.local_3field_pipeline import _ocr_crop
+    from unittest.mock import MagicMock
+    import numpy as np
+
+    reader_mock = MagicMock()
+    reader_mock.readtext.side_effect = [
+        [(None, "Nguyen Van A", 0.95)],
+        [(None, "Nguyen Van AXXXXXXXXXXXXXXXXXXXXXXXXX", 0.30)],
+    ]
+    crop = np.zeros((50, 200, 3), dtype=np.uint8)
+    result = _ocr_crop(crop, reader_mock, min_conf=0.25)
+    assert result["text"] == "Nguyen Van A"
+    assert result["confidence"] == pytest.approx(0.95, rel=0.01)

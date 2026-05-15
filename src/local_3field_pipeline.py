@@ -150,7 +150,7 @@ def _ocr_crop(crop_bgr: np.ndarray, reader, min_conf: float = 0.25) -> Dict[str,
         lines = [text for text, _ in accepted]
         confidence = sum(conf for _, conf in accepted) / len(accepted)
         text = "\n".join(lines)
-        if len(text) > len(str(best["text"])) or confidence > float(best["confidence"]):
+        if confidence > float(best["confidence"]):
             best = {"text": text, "lines": lines, "confidence": confidence}
     return best
 
