@@ -521,7 +521,7 @@ def process_image(
     model_path: str,
     out_dir: str = "debug_3field",
     save_debug: bool = True,
-    ocr_backend: str = "easyocr",
+    ocr_backend: str = "paddleocr",
 ) -> Dict[str, object]:
     src = Path(image_path)
     out = Path(out_dir)
@@ -563,8 +563,9 @@ def process_image(
                 cv2.LINE_AA,
             )
         cv2.imwrite(str(out / f"{src.stem}_preview.jpg"), preview)
-    detector = _get_easyocr_reader()
-    recognizer = _get_vietocr_predictor() if ocr_backend == "vietocr" else None
+    easyocr_reader = _get_easyocr_reader()
+    paddle_reader = _get_paddleocr_reader() if ocr_backend == "paddleocr" else None
+    recognizer = _get_vietocr_predictor() if ocr_backend in ("vietocr", "paddleocr") else None
     ocr: Dict[str, Dict[str, object]] = {}
     crops_meta = {}
 
@@ -583,10 +584,14 @@ def process_image(
         if save_debug:
             cv2.imwrite(str(out / f"{src.stem}_{cls_name}.jpg"), crop)
             cv2.imwrite(str(out / f"{src.stem}_{cls_name}_bw.jpg"), _bw_for_ocr(crop))
-        if ocr_backend == "vietocr" and cls_name != "tracking_number":
-            ocr[cls_name] = _ocr_crop_vietocr(crop, detector, recognizer)
+        if cls_name == "tracking_number":
+            ocr[cls_name] = _ocr_crop(crop, easyocr_reader)
+        elif ocr_backend == "paddleocr":
+            ocr[cls_name] = _ocr_crop_paddle_vietocr(crop, paddle_reader, recognizer)
+        elif ocr_backend == "vietocr":
+            ocr[cls_name] = _ocr_crop_vietocr(crop, easyocr_reader, recognizer)
         else:
-            ocr[cls_name] = _ocr_crop(crop, detector)
+            ocr[cls_name] = _ocr_crop(crop, easyocr_reader)
         if cls_name == "tracking_number":
             barcode_value = _decode_barcode(crop)
             if barcode_value:
@@ -626,7 +631,7 @@ def main() -> None:
     )
     parser.add_argument("--out_dir", default="debug_3field")
     parser.add_argument("--no_debug", action="store_true")
-    parser.add_argument("--ocr_backend", choices=["easyocr", "vietocr"], default="easyocr")
+    parser.add_argument("--ocr_backend", choices=["paddleocr", "vietocr", "easyocr"], default="paddleocr")
     parser.add_argument("--export", action="store_true", help="Append result to Google Sheet and send email.")
     parser.add_argument("--no_sheet", action="store_true", help="When --export is set, skip Google Sheet append.")
     parser.add_argument("--no_email", action="store_true", help="When --export is set, skip notification email.")
