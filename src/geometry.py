@@ -85,10 +85,10 @@ def rectify_perspective(image_bgr: np.ndarray) -> Tuple[np.ndarray, bool]:
 
 
 def normalize_document(image_bgr: np.ndarray) -> Tuple[np.ndarray, Dict[str, object]]:
-    rotated, angle = correct_orientation(image_bgr)
-    rectified, applied = rectify_perspective(rotated)
+    # EXIF orientation is handled at load time; portrait/landscape is handled in preprocessing.
+    rectified, applied = rectify_perspective(image_bgr)
     meta = {
-        "rotation_applied": angle,
+        "rotation_applied": 0,
         "perspective_corrected": applied,
     }
     return rectified, meta
