@@ -2,7 +2,10 @@ import smtplib
 from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import os
 from typing import Dict, List, Optional
+
+import gspread
 
 from src.auth_google import get_gspread_client
 
@@ -20,6 +23,7 @@ SHEET_COLUMNS_A_TO_K: List[str] = [
     "ngay_gio_gui",
     "trang_thai",
 ]
+DEFAULT_EXPORT_WORKSHEET = "Mail OCR Export"
 
 
 def _first_value(data: Dict[str, Optional[str]], *keys: str) -> str:
@@ -49,6 +53,25 @@ def _build_sheet_row(data: Dict[str, Optional[str]]) -> List[str]:
     return row
 
 
+def _get_or_create_export_worksheet(spreadsheet: gspread.Spreadsheet) -> gspread.Worksheet:
+    title = os.environ.get("GOOGLE_SHEET_WORKSHEET", DEFAULT_EXPORT_WORKSHEET).strip() or DEFAULT_EXPORT_WORKSHEET
+    try:
+        worksheet = spreadsheet.worksheet(title)
+    except gspread.WorksheetNotFound:
+        worksheet = spreadsheet.add_worksheet(title=title, rows=1000, cols=len(SHEET_COLUMNS_A_TO_K))
+
+    header = worksheet.row_values(1)[: len(SHEET_COLUMNS_A_TO_K)]
+    if header != SHEET_COLUMNS_A_TO_K:
+        worksheet.update(range_name="A1:K1", values=[SHEET_COLUMNS_A_TO_K], value_input_option="RAW")
+        worksheet.freeze(rows=1)
+    return worksheet
+
+
+def _next_export_row(worksheet: gspread.Worksheet) -> int:
+    values_in_column_a = worksheet.col_values(1)
+    return max(2, len(values_in_column_a) + 1)
+
+
 def push_to_sheet(
     data: Dict[str, Optional[str]],
     sheet_id: str,
@@ -56,9 +79,10 @@ def push_to_sheet(
     token_file: str = "token.json",
 ) -> None:
     gc = get_gspread_client(credentials_file=credentials_file, token_file=token_file)
-    ws = gc.open_by_key(sheet_id).sheet1
+    ws = _get_or_create_export_worksheet(gc.open_by_key(sheet_id))
     row = _build_sheet_row(data)
-    ws.append_row(row, value_input_option="USER_ENTERED")
+    target_row = _next_export_row(ws)
+    ws.update(range_name=f"A{target_row}:K{target_row}", values=[row], value_input_option="USER_ENTERED")
 
 
 def _build_html(data: Dict[str, Optional[str]], confirm_url: str) -> str:

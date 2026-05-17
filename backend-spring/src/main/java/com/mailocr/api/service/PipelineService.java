@@ -105,6 +105,33 @@ public class PipelineService {
     }
   }
 
+  public String confirmReceived(String trackingId) {
+    if (trackingId == null || trackingId.isBlank()) {
+      throw new IllegalArgumentException("Missing id parameter.");
+    }
+    Path projectRoot = Path.of(properties.getProjectRoot()).toAbsolutePath().normalize();
+    List<String> command = new ArrayList<>();
+    command.add(resolve(projectRoot, properties.getPythonExecutable()).toString());
+    command.add("-X");
+    command.add("utf8");
+    command.add("src/confirm_received.py");
+    command.add(trackingId.trim());
+    return runCommand(projectRoot, command);
+  }
+
+  public String sheetUrl(String sheetId, String worksheetTitle) {
+    Path projectRoot = Path.of(properties.getProjectRoot()).toAbsolutePath().normalize();
+    List<String> command = new ArrayList<>();
+    command.add(resolve(projectRoot, properties.getPythonExecutable()).toString());
+    command.add("-X");
+    command.add("utf8");
+    command.add("src/sheet_url.py");
+    command.add(sheetId.trim());
+    command.add("--worksheet");
+    command.add(worksheetTitle.trim());
+    return runCommand(projectRoot, command);
+  }
+
   private PipelineResult parseOutput(String output, Path previewImagePath) {
     int start = output.indexOf('{');
     int end = output.lastIndexOf('}');

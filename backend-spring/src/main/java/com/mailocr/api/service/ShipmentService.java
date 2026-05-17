@@ -104,11 +104,28 @@ public class ShipmentService {
     return new ExportResponse(true, sendSheet, sendEmail, output);
   }
 
+  public ExportAllResponse exportAllToSheet() {
+    int exported = 0;
+    List<String> skipped = new ArrayList<>();
+    for (Shipment shipment : shipmentRepository.findAllByOrderByCreatedAtAsc()) {
+      Map<String, Object> fields = shipment.getFields();
+      Object tracking = fields == null ? null : fields.get("ma_van_don");
+      if (tracking == null || tracking.toString().isBlank()) {
+        skipped.add(shipment.getId());
+        continue;
+      }
+      pipelineService.export(fields, true, false);
+      exported++;
+    }
+    return new ExportAllResponse(true, exported, skipped.size(), skipped);
+  }
+
   public AppConfigResponse appConfig() {
     String sheetId = readConfigValue("GOOGLE_SHEET_ID");
+    String worksheetTitle = readConfigValue("GOOGLE_SHEET_WORKSHEET");
     String sheetUrl = sheetId == null || sheetId.isBlank()
         ? null
-        : "https://docs.google.com/spreadsheets/d/" + sheetId.trim() + "/edit";
+        : resolveSheetUrl(sheetId, worksheetTitle);
     Path storagePath = projectRoot().resolve("storage.json").normalize();
     return new AppConfigResponse(sheetUrl, storagePath.toString());
   }
@@ -325,6 +342,29 @@ public class ShipmentService {
     }
   }
 
+  private String resolveSheetUrl(String sheetId, String worksheetTitle) {
+    String fallback = "https://docs.google.com/spreadsheets/d/" + sheetId.trim() + "/edit";
+    if (worksheetTitle == null || worksheetTitle.isBlank()) {
+      return fallback;
+    }
+    try {
+      String output = pipelineService.sheetUrl(sheetId, worksheetTitle);
+      int marker = output.indexOf("\"url\"");
+      if (marker < 0) {
+        return fallback;
+      }
+      int colon = output.indexOf(':', marker);
+      int firstQuote = output.indexOf('"', colon + 1);
+      int secondQuote = output.indexOf('"', firstQuote + 1);
+      if (colon < 0 || firstQuote < 0 || secondQuote < 0) {
+        return fallback;
+      }
+      return output.substring(firstQuote + 1, secondQuote);
+    } catch (RuntimeException ex) {
+      return fallback;
+    }
+  }
+
   private static String stripQuotes(String value) {
     if ((value.startsWith("\"") && value.endsWith("\"")) || (value.startsWith("'") && value.endsWith("'"))) {
       return value.substring(1, value.length() - 1);
@@ -345,6 +385,9 @@ public class ShipmentService {
   }
 
   public record ExportResponse(boolean ok, boolean sheet, boolean email, String output) {
+  }
+
+  public record ExportAllResponse(boolean ok, int exported, int skipped, List<String> skippedIds) {
   }
 
   public record AppConfigResponse(String googleSheetUrl, String storagePath) {

@@ -69,6 +69,8 @@ function App() {
   const [reviewSubmitting, setReviewSubmitting] = React.useState(false);
   const [exportingId, setExportingId] = React.useState(null);
   const [storingId, setStoringId] = React.useState(null);
+  const [exportingAll, setExportingAll] = React.useState(false);
+  const [storedVersions, setStoredVersions] = React.useState({});
   const logEndRef = React.useRef(null);
 
   React.useEffect(() => {
@@ -166,6 +168,8 @@ function App() {
       addLog('Trich xuat du lieu hoan tat, da tao preview JPG.', 'success');
       if (payload.shipment.needReview) {
         addLog('Thieu truong bat buoc hoac do tin cay thap. Da dua vao Human Review.', 'error');
+      } else {
+        await saveShipmentToSheet(payload.shipment);
       }
       await Promise.all([loadReviewQueue(), loadSheetRows()]);
     } catch (error) {
@@ -194,6 +198,7 @@ function App() {
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.message || `HTTP ${response.status}`);
       addLog(`Task ${selectedTask.id} da xac nhan, luu MongoDB va them vao storage.json.`, 'success');
+      await saveShipmentToSheet(payload);
       setSelectedTask(null);
       setEditBuffer(null);
       await Promise.all([loadReviewQueue(), loadSheetRows(), loadTrainingData()]);
@@ -226,6 +231,38 @@ function App() {
     }
   }
 
+  async function saveShipmentToSheet(shipment) {
+    try {
+      const response = await fetch(`${API_BASE}/api/shipments/${shipment.id}/export`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sheet: true, email: false })
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.message || `HTTP ${response.status}`);
+      addLog(`Da luu Sheet cho ${shipment.fields?.ma_van_don || shipment.id}.`, 'success');
+    } catch (error) {
+      addLog(`Luu Sheet that bai: ${error.message}`, 'error');
+    }
+  }
+
+  async function exportAllShipments() {
+    setExportingAll(true);
+    try {
+      const response = await fetch(`${API_BASE}/api/shipments/export-all`, {
+        method: 'POST'
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.message || `HTTP ${response.status}`);
+      addLog(`Da luu ${payload.exported} ban ghi vao Google Sheet. Bo qua ${payload.skipped} ban ghi thieu ma van don.`, 'success');
+      await loadSheetRows();
+    } catch (error) {
+      addLog(`Luu tat ca vao Sheet that bai: ${error.message}`, 'error');
+    } finally {
+      setExportingAll(false);
+    }
+  }
+
   async function storeShipment(shipment) {
     setStoringId(shipment.id);
     try {
@@ -234,8 +271,11 @@ function App() {
       });
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.message || `HTTP ${response.status}`);
+      setStoredVersions(prev => ({ ...prev, [shipment.id]: payload.savedVersions }));
       addLog(`Da luu ${payload.imageName} vao storage.json (${payload.savedVersions} ban).`, 'success');
-      await Promise.all([loadAppConfig(), loadTrainingData()]);
+      await Promise.all([loadAppConfig(), loadTrainingData(), loadSheetRows()]);
+      setTrainingTab('storage');
+      setActiveTab('training');
     } catch (error) {
       addLog(`Luu storage.json that bai: ${error.message}`, 'error');
     } finally {
@@ -476,6 +516,10 @@ function App() {
                     <RefreshCw size={16} />
                     Refresh
                   </button>
+                  <button className="secondary" onClick={exportAllShipments} disabled={exportingAll}>
+                    {exportingAll ? <Loader2 className="spin" size={16} /> : <Table2 size={16} />}
+                    Save All
+                  </button>
                 </div>
               </div>
 
@@ -503,7 +547,7 @@ function App() {
                       </button>
                       <button onClick={() => storeShipment(row)} disabled={!!storingId}>
                         {storingId === row.id ? <Loader2 className="spin" size={15} /> : <Archive size={15} />}
-                        Storage
+                        {storedVersions[row.id] ? `Stored ${storedVersions[row.id]}` : 'Save & View'}
                       </button>
                     </div>
                   </div>

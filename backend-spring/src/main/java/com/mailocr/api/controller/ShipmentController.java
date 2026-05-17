@@ -59,6 +59,11 @@ public class ShipmentController {
     return shipmentService.export(id, request.sheet(), request.email());
   }
 
+  @PostMapping("/export-all")
+  public ShipmentService.ExportAllResponse exportAll() {
+    return shipmentService.exportAllToSheet();
+  }
+
   @PostMapping("/{id}/storage")
   public ShipmentService.StorageResponse storeJson(@PathVariable String id) {
     return shipmentService.storeJson(id);

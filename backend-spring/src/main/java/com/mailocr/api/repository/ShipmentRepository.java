@@ -8,5 +8,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface ShipmentRepository extends MongoRepository<Shipment, String> {
   List<Shipment> findTop30ByOrderByCreatedAtDesc();
 
+  List<Shipment> findAllByOrderByCreatedAtAsc();
+
   List<Shipment> findByStatusOrderByCreatedAtDesc(ShipmentStatus status);
 }
